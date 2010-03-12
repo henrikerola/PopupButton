@@ -18,6 +18,7 @@ import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.vaadin.terminal.gwt.client.ApplicationConnection;
+import com.vaadin.terminal.gwt.client.Console;
 import com.vaadin.terminal.gwt.client.Container;
 import com.vaadin.terminal.gwt.client.Paintable;
 import com.vaadin.terminal.gwt.client.RenderSpace;
@@ -25,6 +26,7 @@ import com.vaadin.terminal.gwt.client.UIDL;
 import com.vaadin.terminal.gwt.client.Util;
 import com.vaadin.terminal.gwt.client.VCaption;
 import com.vaadin.terminal.gwt.client.VCaptionWrapper;
+import com.vaadin.terminal.gwt.client.VDebugConsole;
 import com.vaadin.terminal.gwt.client.RenderInformation.Size;
 import com.vaadin.terminal.gwt.client.ui.VButton;
 import com.vaadin.terminal.gwt.client.ui.VOverlay;
@@ -167,10 +169,12 @@ public class VPopupButton extends VButton implements Container,
 			Element target = Element
 					.as(event.getNativeEvent().getEventTarget());
 			boolean eventTargetsPopup = getElement().isOrHasChild(target);
-			boolean eventTargetsButton = VPopupButton.this.getElement()
-					.isOrHasChild(target);
+			Console console = ApplicationConnection.getConsole();
+			boolean eventTargetsConsole = console instanceof VDebugConsole
+					&& ((VDebugConsole) console).getElement().isOrHasChild(
+							target);
 			if (event.getTypeInt() == Event.ONCLICK) {
-				if (!eventTargetsPopup && !eventTargetsButton) {
+				if (!eventTargetsPopup && !eventTargetsConsole) {
 					updateState(false, true);
 				}
 			}
@@ -358,5 +362,11 @@ public class VPopupButton extends VButton implements Container,
 				throw new UnsupportedOperationException();
 			}
 		};
+	}
+
+	@Override
+	protected void onDetach() {
+		super.onDetach();
+		hidePopup();
 	}
 }
