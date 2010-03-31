@@ -9,13 +9,15 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
 
 @SuppressWarnings("serial")
 public class PopupButtonApplication extends Application {
 
 	@Override
 	public void init() {
-		Window mainWindow = new Window("PopupButton Application");
+		final Window mainWindow = new Window("PopupButton Application");
 		setMainWindow(mainWindow);
 
 		GridLayout mainLayout = new GridLayout(2, 2);
@@ -55,6 +57,17 @@ public class PopupButtonApplication extends Application {
 		userLayout.addComponent(removeUser);
 		userLayout.setComponentAlignment(removeUser, Alignment.MIDDLE_LEFT);
 
+		Button openSubwindowButton = new Button("Open subwindow",
+				new ClickListener() {
+					public void buttonClick(ClickEvent event) {
+						Window w = new Window();
+						w.center();
+						w.addComponent(createPopupButton());
+						mainWindow.addWindow(w);
+					}
+				});
+		horizontalLayout.addComponent(openSubwindowButton);
+
 		Alignment[] aligns = new Alignment[] { Alignment.TOP_RIGHT,
 				Alignment.BOTTOM_LEFT, Alignment.BOTTOM_RIGHT };
 		for (Alignment align : aligns) {
@@ -65,8 +78,8 @@ public class PopupButtonApplication extends Application {
 	}
 
 	private PopupButton createPopupButton() {
-		PopupButton PopupButton = new PopupButton("Add");
-		PopupButton.setIcon(new ThemeResource(
+		PopupButton popupButton = new PopupButton("Add");
+		popupButton.setIcon(new ThemeResource(
 				"../runo/icons/16/document-add.png"));
 
 		GridLayout gl = new GridLayout(4, 3);
@@ -84,8 +97,8 @@ public class PopupButtonApplication extends Application {
 				.addComponent(createIconButton("../runo/icons/32/document-image.png"));
 		gl.addComponent(createIconButton("../runo/icons/32/document-txt.png"));
 
-		PopupButton.addComponent(gl);
-		return PopupButton;
+		popupButton.addComponent(gl);
+		return popupButton;
 	}
 
 	private Button createIconButton(String icon) {

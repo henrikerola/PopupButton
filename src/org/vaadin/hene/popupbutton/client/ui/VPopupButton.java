@@ -168,24 +168,46 @@ public class VPopupButton extends VButton implements Container,
 		protected void onPreviewNativeEvent(NativePreviewEvent event) {
 			Element target = Element
 					.as(event.getNativeEvent().getEventTarget());
-			boolean eventTargetsPopup = getElement().isOrHasChild(target);
-			Console console = ApplicationConnection.getConsole();
-			boolean eventTargetsConsole = console instanceof VDebugConsole
-					&& ((VDebugConsole) console).getElement().isOrHasChild(
-							target);
-			if (event.getTypeInt() == Event.ONCLICK) {
-				if (!eventTargetsPopup && !eventTargetsConsole) {
+			switch (event.getTypeInt()) {
+			case Event.ONCLICK:
+				if (isOrHasChildOfButton(target)) {
 					updateState(false, true);
 				}
-			}
-
-			// Catch children that use keyboard, so we can unfocus them when
-			// hiding
-			if (eventTargetsPopup && event.getTypeInt() == Event.ONKEYPRESS) {
-				activeChildren.add(target);
+				break;
+			case Event.ONMOUSEDOWN:
+				if (!isOrHasChildOfPopup(target)
+						&& !isOrHasChildOfConsole(target)
+						&& !isOrHasChildOfButton(target)) {
+					updateState(false, true);
+				}
+				break;
+			case Event.ONKEYPRESS:
+				if (isOrHasChildOfPopup(target)) {
+					// Catch children that use keyboard, so we can unfocus them
+					// when
+					// hiding
+					activeChildren.add(target);
+				}
+			default:
+				break;
 			}
 
 			super.onPreviewNativeEvent(event);
+		}
+
+		private boolean isOrHasChildOfPopup(Element element) {
+			return getElement().isOrHasChild(element);
+		}
+
+		private boolean isOrHasChildOfButton(Element element) {
+			return VPopupButton.this.getElement().isOrHasChild(element);
+		}
+
+		private boolean isOrHasChildOfConsole(Element element) {
+			Console console = ApplicationConnection.getConsole();
+			return console instanceof VDebugConsole
+					&& ((VDebugConsole) console).getElement().isOrHasChild(
+							element);
 		}
 
 		/*
