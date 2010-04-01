@@ -2,7 +2,7 @@
 	float: left;
 }	
 
-.v-popupbutton .v-menu-indicator {
+.v-popupbutton .v-popup-indicator {
 	display: inline-block;
 	cursor: pointer;
 	width: 13px;
@@ -10,11 +10,11 @@
 	background: transparent url(../../../themes/base/common/img/sprites.png) no-repeat -5px -10px;
 }
 
-.v-ie6 .v-popupbutton .v-menu-indicator {
+.v-ie6 .v-popupbutton .v-popup-indicator {
 	display: inline;
 	zoom: 1;
 }
-.v-ie7 .v-popupbutton .v-menu-indicator {
+.v-ie7 .v-popupbutton .v-popup-indicator {
 	display: inline;
 	zoom: 1;
 	position: relative;

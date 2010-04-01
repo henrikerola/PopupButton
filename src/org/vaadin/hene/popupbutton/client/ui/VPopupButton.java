@@ -39,7 +39,7 @@ public class VPopupButton extends VButton implements Container,
 	/** Set the CSS class name to allow styling. */
 	public static final String CLASSNAME = "v-popupbutton";
 
-	public static final String MENU_INDICATOR_CLASSNAME = "v-menu-indicator";
+	public static final String POPUP_INDICATOR_CLASSNAME = "v-popup-indicator";
 
 	private final LayoutPopup popup = new LayoutPopup();
 
@@ -48,7 +48,7 @@ public class VPopupButton extends VButton implements Container,
 	public VPopupButton() {
 		super();
 		DivElement e = Document.get().createDivElement();
-		e.setClassName(MENU_INDICATOR_CLASSNAME);
+		e.setClassName(POPUP_INDICATOR_CLASSNAME);
 		getElement().getFirstChildElement().appendChild(e);
 	}
 
