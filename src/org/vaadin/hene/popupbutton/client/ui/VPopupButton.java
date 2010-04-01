@@ -188,6 +188,7 @@ public class VPopupButton extends VButton implements Container,
 					// hiding
 					activeChildren.add(target);
 				}
+				break;
 			default:
 				break;
 			}
