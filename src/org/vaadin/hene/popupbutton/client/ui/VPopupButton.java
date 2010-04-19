@@ -57,6 +57,10 @@ public class VPopupButton extends VButton implements Container,
 	 */
 	public void updateFromUIDL(UIDL uidl, ApplicationConnection client) {
 		super.updateFromUIDL(uidl, client);
+		if (client.updateComponent(this, uidl, false)) {
+			hidePopup();
+			return;
+		}
 		addStyleName(CLASSNAME);
 
 		popupVisible = uidl.getBooleanVariable("popupVisible");
