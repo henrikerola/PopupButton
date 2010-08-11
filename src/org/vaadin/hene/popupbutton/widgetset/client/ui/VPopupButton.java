@@ -1,4 +1,4 @@
-package org.vaadin.hene.popupbutton.client.ui;
+package org.vaadin.hene.popupbutton.widgetset.client.ui;
 
 import java.util.HashSet;
 import java.util.Iterator;

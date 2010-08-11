@@ -5,7 +5,7 @@ import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.vaadin.hene.popupbutton.client.ui.VPopupButton;
+import org.vaadin.hene.popupbutton.widgetset.client.ui.VPopupButton;
 
 import com.vaadin.terminal.PaintException;
 import com.vaadin.terminal.PaintTarget;
