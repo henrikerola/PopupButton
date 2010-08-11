@@ -1,16 +1,19 @@
 package org.vaadin.hene.popupbutton;
 
+import org.vaadin.hene.popupbutton.PopupButton.PopupVisibilityEvent;
+import org.vaadin.hene.popupbutton.PopupButton.PopupVisibilityListener;
+
 import com.vaadin.Application;
 import com.vaadin.terminal.ThemeResource;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
-import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Button.ClickListener;
 
 @SuppressWarnings("serial")
 public class PopupButtonApplication extends Application {
@@ -57,6 +60,20 @@ public class PopupButtonApplication extends Application {
 		userLayout.addComponent(removeUser);
 		userLayout.setComponentAlignment(removeUser, Alignment.MIDDLE_LEFT);
 
+		PopupButton listenerButton = createPopupButton();
+		listenerButton.setCaption("VisibilityListener");
+		listenerButton
+				.addPopupVisibilityListener(new PopupVisibilityListener() {
+					public void popupVisibilityChange(PopupVisibilityEvent event) {
+						String msg = "Popup closed";
+						if (event.getPopupButton().isPopupVisible()) {
+							msg = "Popup opened";
+						}
+						getMainWindow().getWindow().showNotification(msg);
+					}
+				});
+		horizontalLayout.addComponent(listenerButton);
+
 		Button openSubwindowButton = new Button("Open subwindow",
 				new ClickListener() {
 					public void buttonClick(ClickEvent event) {
@@ -86,15 +103,13 @@ public class PopupButtonApplication extends Application {
 		gl.setWidth("150px");
 		gl.setHeight("100px");
 		gl.addComponent(createIconButton("../runo/icons/32/document.png"));
-		gl
-				.addComponent(createIconButton("../runo/icons/32/document-delete.png"));
+		gl.addComponent(createIconButton("../runo/icons/32/document-delete.png"));
 		gl.addComponent(createIconButton("../runo/icons/32/document-pdf.png"));
 		gl.addComponent(createIconButton("../runo/icons/32/document-web.png"));
 		gl.addComponent(createIconButton("../runo/icons/32/document-doc.png"));
 		gl.addComponent(createIconButton("../runo/icons/32/document-ppt.png"));
 		gl.addComponent(createIconButton("../runo/icons/32/document-xsl.png"));
-		gl
-				.addComponent(createIconButton("../runo/icons/32/document-image.png"));
+		gl.addComponent(createIconButton("../runo/icons/32/document-image.png"));
 		gl.addComponent(createIconButton("../runo/icons/32/document-txt.png"));
 
 		popupButton.addComponent(gl);
