@@ -11,8 +11,8 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -21,15 +21,16 @@ import com.vaadin.terminal.gwt.client.ApplicationConnection;
 import com.vaadin.terminal.gwt.client.Console;
 import com.vaadin.terminal.gwt.client.Container;
 import com.vaadin.terminal.gwt.client.Paintable;
+import com.vaadin.terminal.gwt.client.RenderInformation.Size;
 import com.vaadin.terminal.gwt.client.RenderSpace;
 import com.vaadin.terminal.gwt.client.UIDL;
 import com.vaadin.terminal.gwt.client.Util;
 import com.vaadin.terminal.gwt.client.VCaption;
 import com.vaadin.terminal.gwt.client.VCaptionWrapper;
 import com.vaadin.terminal.gwt.client.VDebugConsole;
-import com.vaadin.terminal.gwt.client.RenderInformation.Size;
 import com.vaadin.terminal.gwt.client.ui.VButton;
 import com.vaadin.terminal.gwt.client.ui.VOverlay;
+import com.vaadin.terminal.gwt.client.ui.VPopupView;
 import com.vaadin.terminal.gwt.client.ui.richtextarea.VRichTextArea;
 
 // This class contains code from the VPopupView class.  
@@ -139,6 +140,7 @@ public class VPopupButton extends VButton implements Container,
 		public LayoutPopup() {
 			super(false, false, true);
 			setStyleName(CLASSNAME);
+			addStyleName(VPopupView.CLASSNAME + "-popup");
 		}
 
 		public void updateFromUIDL(final UIDL uidl) {

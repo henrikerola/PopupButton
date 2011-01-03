@@ -9,6 +9,7 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
@@ -73,6 +74,12 @@ public class PopupButtonApplication extends Application {
 					}
 				});
 		horizontalLayout.addComponent(listenerButton);
+
+		PopupButton comboBoxButton = new PopupButton("ComboBox in Popup");
+		ComboBox cb = new ComboBox();
+		cb.setInputPrompt("ComboBox");
+		comboBoxButton.addComponent(cb);
+		horizontalLayout.addComponent(comboBoxButton);
 
 		Button openSubwindowButton = new Button("Open subwindow",
 				new ClickListener() {
