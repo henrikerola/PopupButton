@@ -1,15 +1,10 @@
 package org.vaadin.hene.popupbutton.widgetset.client.ui;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-import java.util.Set;
-
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.Window;
@@ -33,369 +28,434 @@ import com.vaadin.terminal.gwt.client.ui.VOverlay;
 import com.vaadin.terminal.gwt.client.ui.VPopupView;
 import com.vaadin.terminal.gwt.client.ui.richtextarea.VRichTextArea;
 
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.Set;
+
 // This class contains code from the VPopupView class.  
 public class VPopupButton extends VButton implements Container,
-		Iterable<Widget> {
+        Iterable<Widget> {
 
-	/** Set the CSS class name to allow styling. */
-	public static final String CLASSNAME = "v-popupbutton";
+    /** Set the CSS class name to allow styling. */
+    public static final String CLASSNAME = "v-popupbutton";
 
-	public static final String POPUP_INDICATOR_CLASSNAME = "v-popup-indicator";
+    public static final String POPUP_INDICATOR_CLASSNAME = "v-popup-indicator";
 
-	private final LayoutPopup popup = new LayoutPopup();
+    private final LayoutPopup popup = new LayoutPopup();
 
-	private boolean popupVisible = false;
+    private boolean popupVisible = false;
 
-	public VPopupButton() {
-		super();
-		DivElement e = Document.get().createDivElement();
-		e.setClassName(POPUP_INDICATOR_CLASSNAME);
-		getElement().getFirstChildElement().appendChild(e);
-	}
+    private String position = "auto";
 
-	/**
-	 * Called whenever an update is received from the server
-	 */
-	public void updateFromUIDL(UIDL uidl, ApplicationConnection client) {
-		super.updateFromUIDL(uidl, client);
-		if (client.updateComponent(this, uidl, false)) {
-			hidePopup();
-			return;
-		}
-		addStyleName(CLASSNAME);
+    private int xOffset = 0;
 
-		popupVisible = uidl.getBooleanVariable("popupVisible");
-		if (popupVisible) {
-			UIDL popupUIDL = uidl.getChildUIDL(0);
-			popup.setVisible(false);
-			popup.show();
-			popup.updateFromUIDL(popupUIDL);
-			showPopup();
-		} else {
-			hidePopup();
-		}
-	}
+    private int yOffset = 0;
 
-	@Override
-	public void onBrowserEvent(Event event) {
-		int type = event.getTypeInt();
-		switch (type) {
-		case Event.ONMOUSEDOWN:
-			updateState(true, false);
-			break;
-		}
-		super.onBrowserEvent(event);
+    public VPopupButton() {
+        super();
+        DivElement e = Document.get().createDivElement();
+        e.setClassName(POPUP_INDICATOR_CLASSNAME);
+        getElement().getFirstChildElement().appendChild(e);
+    }
 
-	}
+    /**
+     * Called whenever an update is received from the server
+     */
+    @Override
+    public void updateFromUIDL(UIDL uidl, ApplicationConnection client) {
+        super.updateFromUIDL(uidl, client);
+        if (client.updateComponent(this, uidl, false)) {
+            hidePopup();
+            return;
+        }
+        addStyleName(CLASSNAME);
 
-	private void updateState(boolean visible, boolean immediate) {
-		client.updateVariable(id, "popupVisible", visible, immediate);
-	}
+        if (uidl.hasAttribute("position")) {
+            this.position = uidl.getStringAttribute("position");
+        }
 
-	private void showPopup() {
-		DeferredCommand.addCommand(new Command() {
+        String[] styles = uidl.getStringArrayAttribute("styles");
+        if (styles != null) {
+            for (String style : styles) {
+                popup.addStyleName(style);
+            }
+        }
 
-			public void execute() {
-				int extra = 20;
-				int left = getAbsoluteLeft();
-				int top = getAbsoluteTop() + getOffsetHeight();
-				int browserWindowWidth = Window.getClientWidth()
-						+ Window.getScrollLeft();
-				int browserWindowHeight = Window.getClientHeight()
-						+ Window.getScrollTop();
-				if (left + popup.getOffsetWidth() > browserWindowWidth - extra) {
-					left = getAbsoluteLeft()
-							- (popup.getOffsetWidth() - getOffsetWidth());
-				}
-				if (top + popup.getOffsetHeight() > browserWindowHeight - extra) {
-					top = getAbsoluteTop() - popup.getOffsetHeight() - 2;
-				}
-				popup.setPopupPosition(left, top);
-				popup.setVisible(true);
-			}
-		});
-	}
+        if (uidl.hasAttribute("xoffset")) {
+            xOffset = uidl.getIntAttribute("xoffset");
+        }
+        if (uidl.hasAttribute("yoffset")) {
+            yOffset = uidl.getIntAttribute("yoffset");
+        }
 
-	private void hidePopup() {
-		popup.setVisible(false);
-		popup.hide();
-	}
+        popupVisible = uidl.getBooleanVariable("popupVisible");
+        if (popupVisible) {
+            UIDL popupUIDL = uidl.getChildUIDL(0);
+            popup.setVisible(false);
+            popup.show();
+            popup.updateFromUIDL(popupUIDL);
+            showPopup();
+        } else {
+            hidePopup();
+        }
+    }
 
-	private static native void nativeBlur(Element e)
-	/*-{
-	    if (e && e.blur) {
-	        e.blur();
-	    }
-	}-*/;
+    @Override
+    public void onBrowserEvent(Event event) {
+        int type = event.getTypeInt();
+        switch (type) {
+        case Event.ONMOUSEDOWN:
+            updateState(true, false);
+            break;
+        }
+        super.onBrowserEvent(event);
 
-	private class LayoutPopup extends VOverlay {
+    }
 
-		public static final String CLASSNAME = VPopupButton.CLASSNAME
-				+ "-popup";
+    private void updateState(boolean visible, boolean immediate) {
+        client.updateVariable(id, "popupVisible", visible, immediate);
+    }
 
-		private final Set<Element> activeChildren = new HashSet<Element>();
+    private void showPopup() {
+        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
 
-		private boolean hiding = false;
+            public void execute() {
+                if (position.equals("auto")) {
+                    int extra = 20;
 
-		public LayoutPopup() {
-			super(false, false, true);
-			setStyleName(CLASSNAME);
-			addStyleName(VPopupView.CLASSNAME + "-popup");
-		}
+                    int left = getAbsoluteLeft();
+                    int top = getAbsoluteTop() + getOffsetHeight();
+                    int browserWindowWidth = Window.getClientWidth()
+                            + Window.getScrollLeft();
+                    int browserWindowHeight = Window.getClientHeight()
+                            + Window.getScrollTop();
+                    if (left + popup.getOffsetWidth() > browserWindowWidth
+                            - extra) {
+                        left = getAbsoluteLeft()
+                                - (popup.getOffsetWidth() - getOffsetWidth());
+                    }
+                    if (top + popup.getOffsetHeight() > browserWindowHeight
+                            - extra) {
+                        top = getAbsoluteTop() - popup.getOffsetHeight() - 2;
+                    }
+                    popup.setPopupPosition(left + xOffset, top + yOffset);
+                    popup.setVisible(true);
+                } else if (position.equals("fixed")) {
+                    int extra = 20;
 
-		public void updateFromUIDL(final UIDL uidl) {
-			if (Util.isCached(uidl.getChildUIDL(0))) {
-				return;
-			}
+                    int left = getAbsoluteLeft();
+                    int top = getAbsoluteTop() + getOffsetHeight()
+                            - Window.getScrollTop();
 
-			Paintable newPopupComponent = client.getPaintable(uidl
-					.getChildUIDL(0));
-			if (!newPopupComponent.equals(getPaintable())) {
-				if (getPaintable() != null) {
-					client.unregisterPaintable(getPaintable());
-				}
-				setWidget((Widget) newPopupComponent);
-			}
-			getPaintable().updateFromUIDL(uidl.getChildUIDL(0), client);
-		}
+                    int browserWindowWidth = Window.getClientWidth()
+                            + Window.getScrollLeft();
+                    int clientHeight = Window.getClientHeight();
+                    if (left + popup.getOffsetWidth() > browserWindowWidth
+                            - extra) {
+                        left = getAbsoluteLeft()
+                                - (popup.getOffsetWidth() - getOffsetWidth());
+                    }
+                    if (top + popup.getOffsetHeight() > clientHeight - extra) {
+                        top = (getAbsoluteTop() - Window.getScrollTop())
+                                - popup.getOffsetHeight() - 2;
+                    }
+                    popup.setPopupPosition(left + xOffset, top + yOffset);
+                    popup.addStyleName("fixed");
+                    popup.setShadowStyle("fixed");
+                    popup.setVisible(true);
+                }
+            }
+        });
+    }
 
-		private Paintable getPaintable() {
-			return (Paintable) getWidget();
-		}
+    private void hidePopup() {
+        popup.setVisible(false);
+        popup.hide();
+    }
 
-		private VCaptionWrapper getCaptionWrapper() {
-			if (getWidget() instanceof VCaptionWrapper) {
-				return (VCaptionWrapper) getWidget();
-			}
-			return null;
-		}
+    private static native void nativeBlur(Element e)
+    /*-{
+        if (e && e.blur) {
+            e.blur();
+        }
+    }-*/;
 
-		@Override
-		protected void onPreviewNativeEvent(NativePreviewEvent event) {
-			Element target = Element
-					.as(event.getNativeEvent().getEventTarget());
-			switch (event.getTypeInt()) {
-			case Event.ONCLICK:
-				if (isOrHasChildOfButton(target)) {
-					updateState(false, true);
-				}
-				break;
-			case Event.ONMOUSEDOWN:
-				if (!isOrHasChildOfPopup(target)
-						&& !isOrHasChildOfConsole(target)
-						&& !isOrHasChildOfButton(target)) {
-					updateState(false, true);
-				}
-				break;
-			case Event.ONKEYPRESS:
-				if (isOrHasChildOfPopup(target)) {
-					// Catch children that use keyboard, so we can unfocus them
-					// when
-					// hiding
-					activeChildren.add(target);
-				}
-				break;
-			default:
-				break;
-			}
+    private class LayoutPopup extends VOverlay {
 
-			super.onPreviewNativeEvent(event);
-		}
+        public static final String CLASSNAME = VPopupButton.CLASSNAME
+                + "-popup";
 
-		private boolean isOrHasChildOfPopup(Element element) {
-			return getElement().isOrHasChild(element);
-		}
+        private final Set<Element> activeChildren = new HashSet<Element>();
 
-		private boolean isOrHasChildOfButton(Element element) {
-			return VPopupButton.this.getElement().isOrHasChild(element);
-		}
+        private boolean hiding = false;
 
-		private boolean isOrHasChildOfConsole(Element element) {
-			Console console = ApplicationConnection.getConsole();
-			return console instanceof VDebugConsole
-					&& ((VDebugConsole) console).getElement().isOrHasChild(
-							element);
-		}
+        public LayoutPopup() {
+            super(false, false, true);
+            setStyleName(CLASSNAME);
+            addStyleName(VPopupView.CLASSNAME + "-popup");
+        }
 
-		/*
-		 * 
-		 * We need a hack make popup act as a child of VPopupButton in Vaadin's
-		 * component tree, but work in default GWT manner when closing or
-		 * opening.
-		 * 
-		 * (non-Javadoc)
-		 * 
-		 * @see com.google.gwt.user.client.ui.Widget#getParent()
-		 */
-		@Override
-		public Widget getParent() {
-			if (!isAttached() || hiding) {
-				return super.getParent();
-			} else {
-				return VPopupButton.this;
-			}
-		}
+        public void updateFromUIDL(final UIDL uidl) {
+            if (Util.isCached(uidl.getChildUIDL(0))) {
+                return;
+            }
 
-		@Override
-		protected void onDetach() {
-			super.onDetach();
-			hiding = false;
-		}
+            Paintable newPopupComponent = client.getPaintable(uidl
+                    .getChildUIDL(0));
+            if (!newPopupComponent.equals(getPaintable())) {
+                if (getPaintable() != null) {
+                    client.unregisterPaintable(getPaintable());
+                }
+                setWidget((Widget) newPopupComponent);
+            }
+            getPaintable().updateFromUIDL(uidl.getChildUIDL(0), client);
+        }
 
-		public void hide(boolean autoClosed) {
-			hiding = true;
-			syncChildren();
-			super.hide(autoClosed);
-		}
+        private Paintable getPaintable() {
+            return (Paintable) getWidget();
+        }
 
-		@Override
-		public void show() {
-			hiding = false;
-			super.show();
-		}
+        private VCaptionWrapper getCaptionWrapper() {
+            if (getWidget() instanceof VCaptionWrapper) {
+                return (VCaptionWrapper) getWidget();
+            }
+            return null;
+        }
 
-		/*-
-		private void unregisterPaintables() {
-			if (getPaintable() != null) {
-				client.unregisterPaintable(getPaintable());
-			}
-		}*/
+        @Override
+        protected void onPreviewNativeEvent(NativePreviewEvent event) {
+            Element target = Element
+                    .as(event.getNativeEvent().getEventTarget());
+            switch (event.getTypeInt()) {
+            case Event.ONCLICK:
+                if (isOrHasChildOfButton(target)) {
+                    updateState(false, true);
+                }
+                break;
+            case Event.ONMOUSEDOWN:
+                if (!isOrHasChildOfPopup(target)
+                        && !isOrHasChildOfConsole(target)
+                        && !isOrHasChildOfButton(target)) {
+                    updateState(false, true);
+                }
+                break;
+            case Event.ONKEYPRESS:
+                if (isOrHasChildOfPopup(target)) {
+                    // Catch children that use keyboard, so we can unfocus
+                    // them
+                    // when
+                    // hiding
+                    activeChildren.add(target);
+                }
+                break;
+            default:
+                break;
+            }
 
-		/**
-		 * Try to sync all known active child widgets to server
-		 */
-		private void syncChildren() {
-			// Notify children with focus
-			if ((getWidget() instanceof Focusable)) {
-				((Focusable) getWidget()).setFocus(false);
-			} else {
-				checkForRTE(getWidget());
-			}
+            super.onPreviewNativeEvent(event);
+        }
 
-			// Notify children that have used the keyboard
-			for (Element e : activeChildren) {
-				try {
-					nativeBlur(e);
-				} catch (Exception ignored) {
-				}
-			}
-			activeChildren.clear();
-		}
+        private boolean isOrHasChildOfPopup(Element element) {
+            return getElement().isOrHasChild(element);
+        }
 
-		private void checkForRTE(Widget popupComponentWidget2) {
-			if (popupComponentWidget2 instanceof VRichTextArea) {
-				((VRichTextArea) popupComponentWidget2)
-						.synchronizeContentToServer();
-			} else if (popupComponentWidget2 instanceof HasWidgets) {
-				HasWidgets hw = (HasWidgets) popupComponentWidget2;
-				Iterator<Widget> iterator = hw.iterator();
-				while (iterator.hasNext()) {
-					checkForRTE(iterator.next());
-				}
-			}
-		}
+        private boolean isOrHasChildOfButton(Element element) {
+            return VPopupButton.this.getElement().isOrHasChild(element);
+        }
 
-		@Override
-		public com.google.gwt.user.client.Element getContainerElement() {
-			return super.getContainerElement();
-		}
+        private boolean isOrHasChildOfConsole(Element element) {
+            Console console = ApplicationConnection.getConsole();
+            return console instanceof VDebugConsole
+                    && ((VDebugConsole) console).getElement().isOrHasChild(
+                            element);
+        }
 
-		@Override
-		public void updateShadowSizeAndPosition() {
-			super.updateShadowSizeAndPosition();
-		}
-	}
+        /*
+         * 
+         * We need a hack make popup act as a child of VPopupButton in Vaadin's
+         * component tree, but work in default GWT manner when closing or
+         * opening.
+         * 
+         * (non-Javadoc)
+         * 
+         * @see com.google.gwt.user.client.ui.Widget#getParent()
+         */
+        @Override
+        public Widget getParent() {
+            if (!isAttached() || hiding) {
+                return super.getParent();
+            } else {
+                return VPopupButton.this;
+            }
+        }
 
-	public RenderSpace getAllocatedSpace(Widget child) {
-		Size popupExtra = calculatePopupExtra();
+        @Override
+        protected void onDetach() {
+            super.onDetach();
+            hiding = false;
+        }
 
-		return new RenderSpace(RootPanel.get().getOffsetWidth()
-				- popupExtra.getWidth(), RootPanel.get().getOffsetHeight()
-				- popupExtra.getHeight());
-	}
+        @Override
+        public void hide(boolean autoClosed) {
+            hiding = true;
+            syncChildren();
+            super.hide(autoClosed);
+        }
 
-	/**
-	 * Calculate extra space taken by the popup decorations
-	 * 
-	 * @return
-	 */
-	protected Size calculatePopupExtra() {
-		Element pe = popup.getElement();
-		Element ipe = popup.getContainerElement();
+        @Override
+        public void show() {
+            hiding = false;
+            super.show();
+        }
 
-		// border + padding
-		int width = Util.getRequiredWidth(pe) - Util.getRequiredWidth(ipe);
-		int height = Util.getRequiredHeight(pe) - Util.getRequiredHeight(ipe);
+        /*-
+        private void unregisterPaintables() {
+        	if (getPaintable() != null) {
+        		client.unregisterPaintable(getPaintable());
+        	}
+        }*/
 
-		return new Size(width, height);
-	}
+        /**
+         * Try to sync all known active child widgets to server
+         */
+        private void syncChildren() {
+            // Notify children with focus
+            if ((getWidget() instanceof Focusable)) {
+                ((Focusable) getWidget()).setFocus(false);
+            } else {
+                checkForRTE(getWidget());
+            }
 
-	public boolean hasChildComponent(Widget component) {
-		if (popup.getWidget() != null) {
-			return popup.getWidget() == component;
-		} else {
-			return false;
-		}
-	}
+            // Notify children that have used the keyboard
+            for (Element e : activeChildren) {
+                try {
+                    nativeBlur(e);
+                } catch (Exception ignored) {
+                }
+            }
+            activeChildren.clear();
+        }
 
-	public void replaceChildComponent(Widget oldComponent, Widget newComponent) {
-		if (!hasChildComponent(oldComponent)) {
-			throw new IllegalArgumentException();
-		}
-		popup.setWidget(newComponent);
-	}
+        private void checkForRTE(Widget popupComponentWidget2) {
+            if (popupComponentWidget2 instanceof VRichTextArea) {
+                ((VRichTextArea) popupComponentWidget2)
+                        .synchronizeContentToServer();
+            } else if (popupComponentWidget2 instanceof HasWidgets) {
+                HasWidgets hw = (HasWidgets) popupComponentWidget2;
+                Iterator<Widget> iterator = hw.iterator();
+                while (iterator.hasNext()) {
+                    checkForRTE(iterator.next());
+                }
+            }
+        }
 
-	public boolean requestLayout(Set<Paintable> children) {
-		popup.updateShadowSizeAndPosition();
-		return true;
-	}
+        @Override
+        public com.google.gwt.user.client.Element getContainerElement() {
+            return super.getContainerElement();
+        }
 
-	public void updateCaption(Paintable component, UIDL uidl) {
-		if (VCaption.isNeeded(uidl)) {
-			if (popup.getCaptionWrapper() != null) {
-				popup.getCaptionWrapper().updateCaption(uidl);
-			} else {
-				VCaptionWrapper captionWrapper = new VCaptionWrapper(component,
-						client);
-				popup.setWidget(captionWrapper);
-				captionWrapper.updateCaption(uidl);
-			}
-		} else {
-			if (popup.getCaptionWrapper() != null) {
-				popup.setWidget((Widget) popup.getCaptionWrapper()
-						.getPaintable());
-			}
-		}
-	}
+        @Override
+        public void updateShadowSizeAndPosition() {
+            super.updateShadowSizeAndPosition();
+        }
 
-	public Iterator<Widget> iterator() {
-		return new Iterator<Widget>() {
+        @Override
+        protected void setShadowStyle(String style) {
+            super.setShadowStyle(style);
+        }
+    }
 
-			int pos = 0;
+    public RenderSpace getAllocatedSpace(Widget child) {
+        Size popupExtra = calculatePopupExtra();
 
-			public boolean hasNext() {
-				// There is a child widget only if next() has not been called.
-				return (pos == 0);
-			}
+        return new RenderSpace(RootPanel.get().getOffsetWidth()
+                - popupExtra.getWidth(), RootPanel.get().getOffsetHeight()
+                - popupExtra.getHeight());
+    }
 
-			public Widget next() {
-				// Next can be called only once to return the popup.
-				if (pos != 0) {
-					throw new NoSuchElementException();
-				}
-				pos++;
-				return popup;
-			}
+    /**
+     * Calculate extra space taken by the popup decorations
+     * 
+     * @return
+     */
+    protected Size calculatePopupExtra() {
+        Element pe = popup.getElement();
+        Element ipe = popup.getContainerElement();
 
-			public void remove() {
-				throw new UnsupportedOperationException();
-			}
-		};
-	}
+        // border + padding
+        int width = Util.getRequiredWidth(pe) - Util.getRequiredWidth(ipe);
+        int height = Util.getRequiredHeight(pe) - Util.getRequiredHeight(ipe);
 
-	@Override
-	protected void onDetach() {
-		super.onDetach();
-		hidePopup();
-	}
+        return new Size(width, height);
+    }
+
+    public boolean hasChildComponent(Widget component) {
+        if (popup.getWidget() != null) {
+            return popup.getWidget() == component;
+        } else {
+            return false;
+        }
+    }
+
+    public void replaceChildComponent(Widget oldComponent, Widget newComponent) {
+        if (!hasChildComponent(oldComponent)) {
+            throw new IllegalArgumentException();
+        }
+        popup.setWidget(newComponent);
+    }
+
+    public boolean requestLayout(Set<Paintable> children) {
+        popup.updateShadowSizeAndPosition();
+        return true;
+    }
+
+    public void updateCaption(Paintable component, UIDL uidl) {
+        if (VCaption.isNeeded(uidl)) {
+            if (popup.getCaptionWrapper() != null) {
+                popup.getCaptionWrapper().updateCaption(uidl);
+            } else {
+                VCaptionWrapper captionWrapper = new VCaptionWrapper(component,
+                        client);
+                popup.setWidget(captionWrapper);
+                captionWrapper.updateCaption(uidl);
+            }
+        } else {
+            if (popup.getCaptionWrapper() != null) {
+                popup.setWidget((Widget) popup.getCaptionWrapper()
+                        .getPaintable());
+            }
+        }
+    }
+
+    public Iterator<Widget> iterator() {
+        return new Iterator<Widget>() {
+
+            int pos = 0;
+
+            public boolean hasNext() {
+                // There is a child widget only if next() has not been called.
+                return (pos == 0);
+            }
+
+            public Widget next() {
+                // Next can be called only once to return the popup.
+                if (pos != 0) {
+                    throw new NoSuchElementException();
+                }
+                pos++;
+                return popup;
+            }
+
+            public void remove() {
+                throw new UnsupportedOperationException();
+            }
+        };
+    }
+
+    @Override
+    protected void onDetach() {
+        super.onDetach();
+        hidePopup();
+    }
 }

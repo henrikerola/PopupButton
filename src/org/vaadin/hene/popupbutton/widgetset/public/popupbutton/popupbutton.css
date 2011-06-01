@@ -34,3 +34,13 @@
 	-moz-border-radius: 3px;
 	-o-border-radius: 3px;
 }
+
+.v-popupbutton-popup.fixed{
+	position: fixed !important;
+	z-index: 20001 !important;
+}
+
+.v-shadow-fixed {
+	position: fixed !important;
+	z-index: 20000 !important;
+}
