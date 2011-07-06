@@ -52,6 +52,9 @@ public class PopupButton extends Button implements ComponentContainer {
 
 	private final List<String> styles = new ArrayList<String>();
 
+	public PopupButton() {
+	}
+
 	public PopupButton(String caption) {
 		super(caption);
 	}
