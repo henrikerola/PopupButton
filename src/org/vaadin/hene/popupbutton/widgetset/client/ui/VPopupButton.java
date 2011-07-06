@@ -71,26 +71,33 @@ public class VPopupButton extends VButton implements Container,
 		}
 		addStyleName(CLASSNAME);
 
-		if (uidl.hasAttribute("position")) {
-			this.position = uidl.getStringAttribute("position");
-		}
-
-		String[] styles = uidl.getStringArrayAttribute("styles");
-		if (styles != null) {
-			for (String style : styles) {
-				popup.addStyleName(style);
-			}
-		}
-
-		if (uidl.hasAttribute("xoffset")) {
-			xOffset = uidl.getIntAttribute("xoffset");
-		}
-		if (uidl.hasAttribute("yoffset")) {
-			yOffset = uidl.getIntAttribute("yoffset");
-		}
+		position = uidl.getStringAttribute("position");
+		xOffset = uidl.getIntAttribute("xoffset");
+		yOffset = uidl.getIntAttribute("yoffset");
 
 		popupVisible = uidl.getBooleanVariable("popupVisible");
 		if (popupVisible) {
+
+			if (uidl.hasAttribute("style")) {
+				final String[] styles = uidl.getStringAttribute("style").split(
+						" ");
+				final StringBuffer styleBuf = new StringBuffer();
+				final String primaryName = popup.getStylePrimaryName();
+				styleBuf.append(primaryName);
+				styleBuf.append(" ");
+				styleBuf.append(VPopupView.CLASSNAME + "-popup");
+				for (int i = 0; i < styles.length; i++) {
+					styleBuf.append(" ");
+					styleBuf.append(primaryName);
+					styleBuf.append("-");
+					styleBuf.append(styles[i]);
+				}
+				popup.setStyleName(styleBuf.toString());
+			} else {
+				popup.setStyleName(popup.getStylePrimaryName() + " "
+						+ VPopupView.CLASSNAME + "-popup");
+			}
+
 			UIDL popupUIDL = uidl.getChildUIDL(0);
 			popup.setVisible(false);
 			popup.show();
@@ -193,7 +200,6 @@ public class VPopupButton extends VButton implements Container,
 		public LayoutPopup() {
 			super(false, false, true);
 			setStyleName(CLASSNAME);
-			addStyleName(VPopupView.CLASSNAME + "-popup");
 		}
 
 		public void updateFromUIDL(final UIDL uidl) {

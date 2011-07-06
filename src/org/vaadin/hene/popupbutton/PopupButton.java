@@ -2,9 +2,7 @@ package org.vaadin.hene.popupbutton;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import org.vaadin.hene.popupbutton.widgetset.client.ui.VPopupButton;
@@ -50,8 +48,6 @@ public class PopupButton extends Button implements ComponentContainer {
 
 	private boolean popupFixedPosition;
 
-	private final List<String> styles = new ArrayList<String>();
-
 	public PopupButton() {
 	}
 
@@ -85,10 +81,6 @@ public class PopupButton extends Button implements ComponentContainer {
 
 		target.addAttribute("xoffset", xOffset);
 		target.addAttribute("yoffset", yOffset);
-
-		if (styles.size() > 0) {
-			target.addAttribute("styles", styles.toArray());
-		}
 	}
 
 	/*
@@ -114,9 +106,6 @@ public class PopupButton extends Button implements ComponentContainer {
 	 */
 	public void addComponent(Component c) {
 		component = c;
-		for (String style : styles) {
-			component.addStyleName(style);
-		}
 		requestRepaint();
 
 		if (c instanceof ComponentContainer) {
@@ -150,25 +139,6 @@ public class PopupButton extends Button implements ComponentContainer {
 	public void addListener(ComponentDetachListener listener) {
 		addListener(ComponentContainer.ComponentDetachEvent.class, listener,
 				COMPONENT_DETACHED_METHOD);
-	}
-
-	@Override
-	public void addStyleName(String style) {
-		super.addStyleName(style);
-		styles.add(style);
-	}
-
-	@Override
-	public void removeStyleName(String style) {
-		super.removeStyleName(style);
-		styles.remove(style);
-	}
-
-	@Override
-	public void setStyleName(String style) {
-		super.setStyleName(style);
-		styles.clear();
-		styles.add(style);
 	}
 
 	/*
