@@ -10,6 +10,10 @@
 	background: transparent url(../../../themes/base/common/img/sprites.png) no-repeat -5px -10px;
 }
 
+.v-popupbutton.v-disabled .v-popup-indicator {
+	cursor: default;
+}
+
 .v-ie6 .v-popupbutton .v-popup-indicator {
 	display: inline;
 	zoom: 1;
@@ -35,7 +39,7 @@
 	-o-border-radius: 3px;
 }
 
-.v-popupbutton-popup.fixed{
+.v-popupbutton-popup.fixed {
 	position: fixed !important;
 	z-index: 20001 !important;
 }

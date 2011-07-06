@@ -110,11 +110,13 @@ public class VPopupButton extends VButton implements Container,
 
 	@Override
 	public void onBrowserEvent(Event event) {
-		int type = event.getTypeInt();
-		switch (type) {
-		case Event.ONMOUSEDOWN:
-			updateState(true, false);
-			break;
+		if (isEnabled()) {
+			int type = event.getTypeInt();
+			switch (type) {
+			case Event.ONMOUSEDOWN:
+				updateState(true, false);
+				break;
+			}
 		}
 		super.onBrowserEvent(event);
 
