@@ -40,8 +40,9 @@ public class PopupButtonApplication extends Application {
 		textCaptionButton.setComponent(tf);
 		horizontalLayout.addComponent(textCaptionButton);
 
-		PopupButton iconButton = new PopupButton(null);
+		PopupButton iconButton = new PopupButton();
 		iconButton.setIcon(new ThemeResource("../runo/icons/16/users.png"));
+		iconButton.setStyleName("style1 style2");
 		horizontalLayout.addComponent(iconButton);
 
 		VerticalLayout userLayout = new VerticalLayout();
@@ -70,7 +71,7 @@ public class PopupButtonApplication extends Application {
 						if (event.getPopupButton().isPopupVisible()) {
 							msg = "Popup opened";
 						}
-						getMainWindow().getWindow().showNotification(msg);
+						getMainWindow().showNotification(msg);
 					}
 				});
 		horizontalLayout.addComponent(listenerButton);

@@ -43,10 +43,12 @@ public class PopupButton extends Button implements ComponentContainer {
 
 	private boolean popupVisible = false;
 
-	private int xOffset = 0;
-	private int yOffset = 0;
-
-	private boolean popupFixedPosition;
+	// These can be used by extending PopupButton.
+	// It's possible that these are removed in future versions or functionality
+	// is changed.
+	protected int xOffset = 0;
+	protected int yOffset = 0;
+	protected boolean popupFixedPosition;
 
 	public PopupButton() {
 	}
@@ -376,62 +378,4 @@ public class PopupButton extends Button implements ComponentContainer {
 		 */
 		public void popupVisibilityChange(PopupVisibilityEvent event);
 	}
-
-	/**
-	 * 
-	 * @return the amount of pixels that the popup is offset on the X-axis.
-	 */
-	public int getXOffset() {
-		return xOffset;
-	}
-
-	/**
-	 * Sets the amount of pixels that the popup should be offset on the X-axis.
-	 * May be negative.
-	 * 
-	 * @param xOffset
-	 *            X offset in pixels
-	 */
-	public void setXOffset(int xOffset) {
-		this.xOffset = xOffset;
-	}
-
-	/**
-	 * 
-	 * @return the amount of pixels that the popup is offset on the Y-axis.
-	 */
-	public int getYOffset() {
-		return yOffset;
-	}
-
-	/**
-	 * Sets the amount of pixels that the popup should be offset on the X-axis.
-	 * May be negative.
-	 * 
-	 * @param yOffset
-	 *            Y offset in pixels
-	 */
-	public void setYOffset(int yOffset) {
-		this.yOffset = yOffset;
-	}
-
-	/**
-	 * Set the popup to have a fixed CSS position instead of the default
-	 * Absolute.
-	 * 
-	 * @param popupFixedPosition
-	 */
-	public void setPopupFixedPosition(boolean popupFixedPosition) {
-		this.popupFixedPosition = popupFixedPosition;
-	}
-
-	/**
-	 * Does the popup use fixed positioning?
-	 * 
-	 * @return
-	 */
-	public boolean isPopupFixedPosition() {
-		return popupFixedPosition;
-	}
-
 }

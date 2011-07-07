@@ -148,7 +148,11 @@ public class VPopupButton extends VButton implements Container,
 							- extra) {
 						top = getAbsoluteTop() - popup.getOffsetHeight() - 2;
 					}
-					popup.setPopupPosition(left + xOffset, top + yOffset);
+					left = left + xOffset;
+					if (left < 0) {
+						left = 0;
+					}
+					popup.setPopupPosition(left, top + yOffset);
 					popup.setVisible(true);
 				} else if (position.equals("fixed")) {
 					int extra = 20;
@@ -169,7 +173,11 @@ public class VPopupButton extends VButton implements Container,
 						top = (getAbsoluteTop() - Window.getScrollTop())
 								- popup.getOffsetHeight() - 2;
 					}
-					popup.setPopupPosition(left + xOffset, top + yOffset);
+					left = left + xOffset;
+					if (left < 0) {
+						left = 0;
+					}
+					popup.setPopupPosition(left, top + yOffset);
 					popup.addStyleName("fixed");
 					popup.setShadowStyle("fixed");
 					popup.setVisible(true);
