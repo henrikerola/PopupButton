@@ -10,6 +10,7 @@ import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.Window;
@@ -109,17 +110,11 @@ public class VPopupButton extends VButton implements Container,
 	}
 
 	@Override
-	public void onBrowserEvent(Event event) {
-		if (isEnabled()) {
-			int type = event.getTypeInt();
-			switch (type) {
-			case Event.ONMOUSEDOWN:
-				updateState(true, false);
-				break;
-			}
+	public void onClick(ClickEvent event) {
+		if (!popupVisible) {
+			updateState(true, false);
 		}
-		super.onBrowserEvent(event);
-
+		super.onClick(event);
 	}
 
 	private void updateState(boolean visible, boolean immediate) {
