@@ -53,6 +53,8 @@ public class VPopupButton extends VButton implements Container,
 
 	private int yOffset = 0;
 
+	private Paintable popupPositionPaintable;
+
 	public VPopupButton() {
 		super();
 		DivElement e = Document.get().createDivElement();
@@ -78,6 +80,12 @@ public class VPopupButton extends VButton implements Container,
 
 		popupVisible = uidl.getBooleanVariable("popupVisible");
 		if (popupVisible) {
+			if (uidl.hasAttribute("popupPositionPaintable")) {
+				popupPositionPaintable = uidl.getPaintableAttribute(
+						"popupPositionPaintable", client);
+			} else {
+				popupPositionPaintable = null;
+			}
 
 			if (uidl.hasAttribute("style")) {
 				final String[] styles = uidl.getStringAttribute("style").split(
@@ -121,6 +129,14 @@ public class VPopupButton extends VButton implements Container,
 		client.updateVariable(id, "popupVisible", visible, immediate);
 	}
 
+	private Widget getPopupPositionWidget() {
+		if (popupPositionPaintable != null) {
+			return (Widget) popupPositionPaintable;
+		} else {
+			return this;
+		}
+	}
+
 	private void showPopup() {
 		Scheduler.get().scheduleDeferred(new ScheduledCommand() {
 
@@ -128,20 +144,23 @@ public class VPopupButton extends VButton implements Container,
 				if (position.equals("auto")) {
 					int extra = 20;
 
-					int left = getAbsoluteLeft();
-					int top = getAbsoluteTop() + getOffsetHeight();
+					int left = getPopupPositionWidget().getAbsoluteLeft();
+					int top = getPopupPositionWidget().getAbsoluteTop()
+							+ getPopupPositionWidget().getOffsetHeight();
 					int browserWindowWidth = Window.getClientWidth()
 							+ Window.getScrollLeft();
 					int browserWindowHeight = Window.getClientHeight()
 							+ Window.getScrollTop();
 					if (left + popup.getOffsetWidth() > browserWindowWidth
 							- extra) {
-						left = getAbsoluteLeft()
-								- (popup.getOffsetWidth() - getOffsetWidth());
+						left = getPopupPositionWidget().getAbsoluteLeft()
+								- (popup.getOffsetWidth() - getPopupPositionWidget()
+										.getOffsetWidth());
 					}
 					if (top + popup.getOffsetHeight() > browserWindowHeight
 							- extra) {
-						top = getAbsoluteTop() - popup.getOffsetHeight() - 2;
+						top = getPopupPositionWidget().getAbsoluteTop()
+								- popup.getOffsetHeight() - 2;
 					}
 					left = left + xOffset;
 					if (left < 0) {
@@ -152,8 +171,9 @@ public class VPopupButton extends VButton implements Container,
 				} else if (position.equals("fixed")) {
 					int extra = 20;
 
-					int left = getAbsoluteLeft();
-					int top = getAbsoluteTop() + getOffsetHeight()
+					int left = getPopupPositionWidget().getAbsoluteLeft();
+					int top = getPopupPositionWidget().getAbsoluteTop()
+							+ getPopupPositionWidget().getOffsetHeight()
 							- Window.getScrollTop();
 
 					int browserWindowWidth = Window.getClientWidth()
@@ -161,12 +181,13 @@ public class VPopupButton extends VButton implements Container,
 					int clientHeight = Window.getClientHeight();
 					if (left + popup.getOffsetWidth() > browserWindowWidth
 							- extra) {
-						left = getAbsoluteLeft()
-								- (popup.getOffsetWidth() - getOffsetWidth());
+						left = getPopupPositionWidget().getAbsoluteLeft()
+								- (popup.getOffsetWidth() - getPopupPositionWidget()
+										.getOffsetWidth());
 					}
 					if (top + popup.getOffsetHeight() > clientHeight - extra) {
-						top = (getAbsoluteTop() - Window.getScrollTop())
-								- popup.getOffsetHeight() - 2;
+						top = (getPopupPositionWidget().getAbsoluteTop() - Window
+								.getScrollTop()) - popup.getOffsetHeight() - 2;
 					}
 					left = left + xOffset;
 					if (left < 0) {

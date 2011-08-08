@@ -9,6 +9,7 @@ import org.vaadin.hene.popupbutton.widgetset.client.ui.VPopupButton;
 
 import com.vaadin.terminal.PaintException;
 import com.vaadin.terminal.PaintTarget;
+import com.vaadin.terminal.Paintable;
 import com.vaadin.tools.ReflectTools;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ClientWidget;
@@ -49,6 +50,7 @@ public class PopupButton extends Button implements ComponentContainer {
 	protected int xOffset = 0;
 	protected int yOffset = 0;
 	protected boolean popupFixedPosition;
+	protected Paintable popupPositionPaintable;
 
 	public PopupButton() {
 	}
@@ -74,6 +76,10 @@ public class PopupButton extends Button implements ComponentContainer {
 			target.startTag("component");
 			component.paint(target);
 			target.endTag("component");
+			if (popupPositionPaintable != null) {
+				target.addAttribute("popupPositionPaintable",
+						popupPositionPaintable);
+			}
 		}
 		if (popupFixedPosition) {
 			target.addAttribute("position", "fixed");
