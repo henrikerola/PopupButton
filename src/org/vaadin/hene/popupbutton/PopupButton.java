@@ -269,6 +269,20 @@ public class PopupButton extends Button implements ComponentContainer {
 		}
 	}
 
+	public void attach() {
+		super.attach();
+		if (component != null) {
+			component.attach();
+		}
+	}
+
+	public void detach() {
+		super.detach();
+		if (component != null) {
+			component.detach();
+		}
+	}
+
 	/**
 	 * Shows or hides popup.
 	 * 
