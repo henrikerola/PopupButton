@@ -36,6 +36,8 @@ public class PopupButtonConnector extends ButtonConnector implements
 
 	private boolean popupVisible = false;
 
+	private HandlerRegistration nativePreviewHandler;
+
 	public PopupButtonConnector() {
 		addConnectorHierarchyChangeHandler(this);
 	}
@@ -43,7 +45,16 @@ public class PopupButtonConnector extends ButtonConnector implements
 	@Override
 	public void init() {
 		super.init();
-		Event.addNativePreviewHandler(this);
+		nativePreviewHandler = Event.addNativePreviewHandler(this);
+	}
+
+	@Override
+	public void onUnregister() {
+		super.onUnregister();
+		if (nativePreviewHandler != null) {
+			nativePreviewHandler.removeHandler();
+			nativePreviewHandler = null;
+		}
 	}
 
 	@Override
