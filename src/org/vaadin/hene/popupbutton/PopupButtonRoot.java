@@ -24,7 +24,7 @@ public class PopupButtonRoot extends Root {
 
 	@Override
 	protected void init(WrappedRequest request) {
-		setCaption("PopupButton Application");
+		getPage().setTitle("PopupButton Application");
 
 		GridLayout mainLayout = new GridLayout(2, 2);
 		mainLayout.setStyleName("main");
