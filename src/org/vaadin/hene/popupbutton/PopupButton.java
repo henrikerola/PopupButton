@@ -7,9 +7,7 @@ import java.util.Iterator;
 import org.vaadin.hene.popupbutton.widgetset.client.ui.PopupButtonServerRpc;
 import org.vaadin.hene.popupbutton.widgetset.client.ui.PopupButtonState;
 
-import com.vaadin.terminal.gwt.client.Connector;
 import com.vaadin.tools.ReflectTools;
-import com.vaadin.ui.AbstractComponentContainer;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.ComponentContainer;
@@ -200,29 +198,6 @@ public class PopupButton extends Button implements ComponentContainer {
 	 */
 	public void replaceComponent(Component oldComponent, Component newComponent) {
 		throw new UnsupportedOperationException();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.vaadin.ui.ComponentContainer#requestRepaintAll()
-	 */
-	public void requestRepaintAll() {
-		AbstractComponentContainer.requestRepaintAll(this);
-	}
-
-	public void attach() {
-		super.attach();
-		if (component != null) {
-			component.attach();
-		}
-	}
-
-	public void detach() {
-		super.detach();
-		if (component != null) {
-			component.detach();
-		}
 	}
 
 	/**

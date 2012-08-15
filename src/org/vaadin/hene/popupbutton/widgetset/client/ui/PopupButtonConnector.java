@@ -17,6 +17,7 @@ import com.vaadin.terminal.gwt.client.ComponentConnector;
 import com.vaadin.terminal.gwt.client.ComponentContainerConnector;
 import com.vaadin.terminal.gwt.client.ConnectorHierarchyChangeEvent;
 import com.vaadin.terminal.gwt.client.ConnectorHierarchyChangeEvent.ConnectorHierarchyChangeHandler;
+import com.vaadin.terminal.gwt.client.ServerConnector;
 import com.vaadin.terminal.gwt.client.VCaption;
 import com.vaadin.terminal.gwt.client.VCaptionWrapper;
 import com.vaadin.terminal.gwt.client.communication.RpcProxy;
@@ -113,7 +114,7 @@ public class PopupButtonConnector extends ButtonConnector implements
 	}
 
 	public void onConnectorHierarchyChange(ConnectorHierarchyChangeEvent event) {
-		for (ComponentConnector child : getChildren()) {
+		for (ComponentConnector child : getChildComponents()) {
 			getWidget().popup.setWidget(child.getWidget());
 		}
 
@@ -160,7 +161,7 @@ public class PopupButtonConnector extends ButtonConnector implements
 
 	List<ComponentConnector> children;
 
-	public List<ComponentConnector> getChildren() {
+	public List<ComponentConnector> getChildComponents() {
 		if (children == null) {
 			return new LinkedList<ComponentConnector>();
 		}
@@ -168,7 +169,7 @@ public class PopupButtonConnector extends ButtonConnector implements
 		return children;
 	}
 
-	public void setChildren(List<ComponentConnector> children) {
+	public void setChildComponents(List<ComponentConnector> children) {
 		this.children = children;
 	}
 

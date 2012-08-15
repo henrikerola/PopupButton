@@ -241,11 +241,6 @@ public class VPopupButton extends VButton {
 		}
 
 		@Override
-		public void updateShadowSizeAndPosition() {
-			super.updateShadowSizeAndPosition();
-		}
-
-		@Override
 		protected void setShadowStyle(String style) {
 			super.setShadowStyle(style);
 		}
