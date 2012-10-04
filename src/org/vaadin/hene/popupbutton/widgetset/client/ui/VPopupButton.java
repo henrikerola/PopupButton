@@ -2,7 +2,6 @@ package org.vaadin.hene.popupbutton.widgetset.client.ui;
 
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 import java.util.Set;
 
 import com.google.gwt.core.client.Scheduler;
@@ -10,27 +9,14 @@ import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.HasWidgets;
-import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.vaadin.terminal.gwt.client.ApplicationConnection;
-import com.vaadin.terminal.gwt.client.Console;
-import com.vaadin.terminal.gwt.client.Paintable;
-import com.vaadin.terminal.gwt.client.RenderInformation.Size;
-import com.vaadin.terminal.gwt.client.RenderSpace;
-import com.vaadin.terminal.gwt.client.UIDL;
-import com.vaadin.terminal.gwt.client.Util;
-import com.vaadin.terminal.gwt.client.VCaption;
-import com.vaadin.terminal.gwt.client.VCaptionWrapper;
-import com.vaadin.terminal.gwt.client.VDebugConsole;
-import com.vaadin.terminal.gwt.client.ui.VOverlay;
-import com.vaadin.terminal.gwt.client.ui.button.VButton;
-import com.vaadin.terminal.gwt.client.ui.richtextarea.VRichTextArea;
+import com.vaadin.client.VCaptionWrapper;
+import com.vaadin.client.ui.VOverlay;
+import com.vaadin.client.ui.button.VButton;
+import com.vaadin.client.ui.richtextarea.VRichTextArea;
 
 // This class contains code from the VPopupView class.  
 public class VPopupButton extends VButton {
@@ -260,10 +246,12 @@ public class VPopupButton extends VButton {
 		return getElement().isOrHasChild(element);
 	}
 
+// Unclear what should happen here. ApplicationConnection.getConsole() gone
 	public boolean isOrHasChildOfConsole(Element element) {
-		Console console = ApplicationConnection.getConsole();
-		return console instanceof VDebugConsole
-				&& ((VDebugConsole) console).getElement().isOrHasChild(
-						element);
+//		Console console = ApplicationConnection.getConsole();
+//		return console instanceof VDebugConsole
+//				&& ((VDebugConsole) console).getElement().isOrHasChild(
+//						element);
+		return false;
 	}
 }

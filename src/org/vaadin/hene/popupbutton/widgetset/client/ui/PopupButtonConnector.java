@@ -13,20 +13,21 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.user.client.ui.Widget;
-import com.vaadin.terminal.gwt.client.ComponentConnector;
-import com.vaadin.terminal.gwt.client.ComponentContainerConnector;
-import com.vaadin.terminal.gwt.client.ConnectorHierarchyChangeEvent;
-import com.vaadin.terminal.gwt.client.ConnectorHierarchyChangeEvent.ConnectorHierarchyChangeHandler;
-import com.vaadin.terminal.gwt.client.ServerConnector;
-import com.vaadin.terminal.gwt.client.VCaption;
-import com.vaadin.terminal.gwt.client.VCaptionWrapper;
-import com.vaadin.terminal.gwt.client.communication.RpcProxy;
-import com.vaadin.terminal.gwt.client.communication.StateChangeEvent;
-import com.vaadin.terminal.gwt.client.ui.Connect;
-import com.vaadin.terminal.gwt.client.ui.PostLayoutListener;
-import com.vaadin.terminal.gwt.client.ui.button.ButtonConnector;
-import com.vaadin.terminal.gwt.client.ui.popupview.VPopupView;
+import com.vaadin.client.ComponentConnector;
+import com.vaadin.client.ComponentContainerConnector;
+import com.vaadin.client.ConnectorHierarchyChangeEvent;
+import com.vaadin.client.ConnectorHierarchyChangeEvent.ConnectorHierarchyChangeHandler;
+import com.vaadin.client.VCaption;
+import com.vaadin.client.VCaptionWrapper;
+import com.vaadin.client.communication.RpcProxy;
+import com.vaadin.client.communication.StateChangeEvent;
+import com.vaadin.client.ui.PostLayoutListener;
+import com.vaadin.client.ui.button.ButtonConnector;
+import com.vaadin.client.ui.popupview.VPopupView;
+import com.vaadin.shared.ui.Connect;
 
+
+@SuppressWarnings("serial")
 @Connect(PopupButton.class)
 public class PopupButtonConnector extends ButtonConnector implements
 		ComponentContainerConnector, ConnectorHierarchyChangeHandler,
@@ -75,22 +76,22 @@ public class PopupButtonConnector extends ButtonConnector implements
 		// getWidget().xOffset = uidl.getIntAttribute("xoffset");
 		// getWidget().yOffset = uidl.getIntAttribute("yoffset");
 
-		if (getState().isPopupVisible()) {
-			if (getState().getPopupPositionConnector() != null) {
+		if (getState().popupVisible) {
+			if (getState().popupPositionConnector != null) {
 				getWidget().popupPositionWidget = ((ComponentConnector) getState()
-						.getPopupPositionConnector()).getWidget();
+						.popupPositionConnector).getWidget();
 			} else {
 				getWidget().popupPositionWidget = null;
 			}
 
-			if (getState().hasStyles()) {
+			if (getState().styles != null && !getState().styles.isEmpty()) {
 				final StringBuffer styleBuf = new StringBuffer();
 				final String primaryName = getWidget().popup
 						.getStylePrimaryName();
 				styleBuf.append(primaryName);
 				styleBuf.append(" ");
 				styleBuf.append(VPopupView.CLASSNAME + "-popup");
-				for (String style : getState().getStyles()) {
+				for (String style : getState().styles) {
 					styleBuf.append(" ");
 					styleBuf.append(primaryName);
 					styleBuf.append("-");
@@ -127,7 +128,7 @@ public class PopupButtonConnector extends ButtonConnector implements
 	}
 
 	@Override
-	protected Widget createWidget() {
+	protected VPopupButton createWidget() {
 		return GWT.create(VPopupButton.class);
 	}
 

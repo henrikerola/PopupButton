@@ -1,6 +1,6 @@
 package org.vaadin.hene.popupbutton.widgetset.client.ui;
 
-import com.vaadin.terminal.gwt.client.communication.ServerRpc;
+import com.vaadin.shared.communication.ServerRpc;
 
 public interface PopupButtonServerRpc extends ServerRpc {
 	

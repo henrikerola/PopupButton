@@ -3,8 +3,8 @@ package org.vaadin.hene.popupbutton;
 import org.vaadin.hene.popupbutton.PopupButton.PopupVisibilityEvent;
 import org.vaadin.hene.popupbutton.PopupButton.PopupVisibilityListener;
 
-import com.vaadin.terminal.ThemeResource;
-import com.vaadin.terminal.WrappedRequest;
+import com.vaadin.server.ThemeResource;
+import com.vaadin.server.VaadinRequest;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -12,18 +12,18 @@ import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Root;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextArea;
-import com.vaadin.ui.TextField;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.Reindeer;
 
 @SuppressWarnings("serial")
-public class PopupButtonRoot extends Root {
+public class PopupButtonRoot extends UI {
 
 	@Override
-	protected void init(WrappedRequest request) {
+	protected void init(VaadinRequest request) {
 		getPage().setTitle("PopupButton Application");
 
 		GridLayout mainLayout = new GridLayout(2, 2);
@@ -73,7 +73,7 @@ public class PopupButtonRoot extends Root {
 						if (event.getPopupButton().isPopupVisible()) {
 							msg = "Popup opened";
 						}
-						showNotification(msg);
+						Notification.show(msg);
 					}
 				});
 		horizontalLayout.addComponent(listenerButton);

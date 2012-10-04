@@ -7,7 +7,7 @@ import java.util.Iterator;
 import org.vaadin.hene.popupbutton.widgetset.client.ui.PopupButtonServerRpc;
 import org.vaadin.hene.popupbutton.widgetset.client.ui.PopupButtonState;
 
-import com.vaadin.tools.ReflectTools;
+import com.vaadin.util.ReflectTools;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.ComponentContainer;
@@ -67,7 +67,7 @@ public class PopupButton extends Button implements ComponentContainer {
 	 */
 	public void addComponent(Component c) {
 		component = c;
-		requestRepaint();
+		markAsDirty();
 
 		if (c instanceof ComponentContainer) {
 			// Make sure we're not adding the component inside it's own content
@@ -89,17 +89,6 @@ public class PopupButton extends Button implements ComponentContainer {
 
 		c.setParent(this);
 		fireEvent(new ComponentAttachEvent(this, component));
-	}
-
-	public void addListener(ComponentAttachListener listener) {
-		addListener(ComponentContainer.ComponentAttachEvent.class, listener,
-				COMPONENT_ATTACHED_METHOD);
-
-	}
-
-	public void addListener(ComponentDetachListener listener) {
-		addListener(ComponentContainer.ComponentDetachEvent.class, listener,
-				COMPONENT_DETACHED_METHOD);
 	}
 
 	/*
@@ -164,29 +153,7 @@ public class PopupButton extends Button implements ComponentContainer {
 			fireEvent(new ComponentDetachEvent(this, c));
 		}
 		component = null;
-		requestRepaint();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @seecom.vaadin.ui.ComponentContainer#removeListener(com.vaadin.ui.
-	 * ComponentContainer.ComponentAttachListener)
-	 */
-	public void removeListener(ComponentAttachListener listener) {
-		removeListener(ComponentContainer.ComponentAttachEvent.class, listener,
-				COMPONENT_ATTACHED_METHOD);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @seecom.vaadin.ui.ComponentContainer#removeListener(com.vaadin.ui.
-	 * ComponentContainer.ComponentDetachListener)
-	 */
-	public void removeListener(ComponentDetachListener listener) {
-		removeListener(ComponentContainer.ComponentDetachEvent.class, listener,
-				COMPONENT_DETACHED_METHOD);
+		markAsDirty();
 	}
 
 	/**
@@ -207,10 +174,10 @@ public class PopupButton extends Button implements ComponentContainer {
 	 *            if true, popup is set to visible, otherwise popup is hidden.
 	 */
 	public void setPopupVisible(boolean popupVisible) {
-		if (getState().isPopupVisible() != popupVisible) {
-			getState().setPopupVisible(popupVisible);
+		if (getState().popupVisible != popupVisible) {
+			getState().popupVisible = popupVisible;
 			fireEvent(new PopupVisibilityEvent(this));
-			requestRepaint();
+			markAsDirty();
 		}
 	}
 
@@ -220,7 +187,7 @@ public class PopupButton extends Button implements ComponentContainer {
 	 * @return true, if popup is visible, false otherwise.
 	 */
 	public boolean isPopupVisible() {
-		return getState().isPopupVisible();
+		return getState().popupVisible;
 	}
 
 	/**
@@ -334,6 +301,38 @@ public class PopupButton extends Button implements ComponentContainer {
 	}
 	
 	protected void setPopupPositionComponent(Component component) {
-		getState().setPopupPositionConnector(component);
+		getState().popupPositionConnector = component;
+	}
+
+	public void addComponentAttachListener(ComponentAttachListener listener) {
+		addListener(ComponentContainer.ComponentAttachEvent.class, listener, COMPONENT_ATTACHED_METHOD);	
+	}
+
+	public void removeComponentAttachListener(ComponentAttachListener listener) {
+		removeListener(ComponentContainer.ComponentAttachEvent.class, listener, COMPONENT_ATTACHED_METHOD);
+	}
+
+	public void addComponentDetachListener(ComponentDetachListener listener) {
+		addListener(ComponentContainer.ComponentDetachEvent.class, listener, COMPONENT_DETACHED_METHOD);
+	}
+
+	public void removeComponentDetachListener(ComponentDetachListener listener) {
+		removeListener(ComponentContainer.ComponentDetachEvent.class, listener, COMPONENT_DETACHED_METHOD);
+	}
+
+	public void addListener(ComponentAttachListener listener) {
+		addComponentAttachListener(listener);
+	}
+
+	public void removeListener(ComponentAttachListener listener) {
+		removeComponentAttachListener(listener);
+	}
+
+	public void addListener(ComponentDetachListener listener) {
+		addComponentDetachListener(listener);
+	}
+
+	public void removeListener(ComponentDetachListener listener) {
+		removeComponentDetachListener(listener);
 	}
 }

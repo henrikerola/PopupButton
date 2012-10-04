@@ -9,10 +9,9 @@
   </context-param>
   <servlet>
   	<servlet-name>PopupButton Application</servlet-name>
-  	<servlet-class>
-  	com.vaadin.terminal.gwt.server.ApplicationServlet</servlet-class>
+  	<servlet-class>com.vaadin.server.VaadinServlet</servlet-class>
   	<init-param>
-  		<param-name>root</param-name>
+  		<param-name>ui</param-name>
   		<param-value>org.vaadin.hene.popupbutton.PopupButtonRoot</param-value>
   	</init-param>
   	<init-param>
