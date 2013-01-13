@@ -39,6 +39,13 @@ public class PopupButtonApplication extends Application {
 		tf.setRows(10);
 		textCaptionButton.setComponent(tf);
 		horizontalLayout.addComponent(textCaptionButton);
+		textCaptionButton
+				.addPopupVisibilityListener(new PopupVisibilityListener() {
+					@Override
+					public void popupVisibilityChange(PopupVisibilityEvent event) {
+						tf.focus();
+					}
+				});
 
 		PopupButton iconButton = new PopupButton();
 		iconButton.setIcon(new ThemeResource("../runo/icons/16/users.png"));
