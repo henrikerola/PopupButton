@@ -3,26 +3,19 @@ package org.vaadin.hene.popupbutton;
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.Iterator;
-import java.util.Map;
 
-import org.vaadin.hene.popupbutton.widgetset.client.ui.VPopupButton;
+import org.vaadin.hene.popupbutton.widgetset.client.ui.PopupButtonServerRpc;
+import org.vaadin.hene.popupbutton.widgetset.client.ui.PopupButtonState;
 
-import com.vaadin.terminal.PaintException;
-import com.vaadin.terminal.PaintTarget;
-import com.vaadin.terminal.Paintable;
-import com.vaadin.tools.ReflectTools;
+import com.vaadin.util.ReflectTools;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.ClientWidget;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.ComponentContainer;
-import com.vaadin.ui.Form;
-import com.vaadin.ui.Table;
 
 /**
  * Server side component for the VPopupButton widget.
  */
 // This class contains code from AbstractComponentContainer
-@ClientWidget(VPopupButton.class)
 public class PopupButton extends Button implements ComponentContainer {
 
 	private static final long serialVersionUID = -3148268967211155218L;
@@ -42,68 +35,28 @@ public class PopupButton extends Button implements ComponentContainer {
 
 	private Component component;
 
-	private boolean popupVisible = false;
-
 	// These can be used by extending PopupButton.
 	// It's possible that these are removed in future versions or functionality
 	// is changed.
 	protected int xOffset = 0;
 	protected int yOffset = 0;
 	protected boolean popupFixedPosition;
-	protected Paintable popupPositionPaintable;
+	//protected Paintable popupPositionPaintable; //FIXME
+	
+	private PopupButtonServerRpc rpc = new PopupButtonServerRpc() {
+		
+		public void setPopupVisible(boolean visible) {
+			PopupButton.this.setPopupVisible(visible);
+		}
+	};
 
 	public PopupButton() {
+		registerRpc(rpc);
 	}
 
 	public PopupButton(String caption) {
 		super(caption);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.vaadin.ui.Button#paintContent(com.vaadin.terminal.PaintTarget)
-	 */
-	@Override
-	public void paintContent(PaintTarget target) throws PaintException {
-		super.paintContent(target);
-		target.addVariable(this, "popupVisible", popupVisible);
-		if (popupVisible) {
-			if (component == null) {
-				throw new IllegalStateException(
-						"component cannot be null. Use addComponent to set the component.");
-			}
-			target.startTag("component");
-			component.paint(target);
-			target.endTag("component");
-			if (popupPositionPaintable != null) {
-				target.addAttribute("popupPositionPaintable",
-						popupPositionPaintable);
-			}
-		}
-		if (popupFixedPosition) {
-			target.addAttribute("position", "fixed");
-		} else {
-			target.addAttribute("position", "auto");
-		}
-
-		target.addAttribute("xoffset", xOffset);
-		target.addAttribute("yoffset", yOffset);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.vaadin.ui.Button#changeVariables(java.lang.Object,
-	 * java.util.Map)
-	 */
-	@Override
-	public void changeVariables(Object source, Map<String, Object> variables) {
-		super.changeVariables(source, variables);
-		if (variables.containsKey("popupVisible")) {
-			setPopupVisible(((Boolean) variables.get("popupVisible"))
-					.booleanValue());
-		}
+		registerRpc(rpc);
 	}
 
 	/*
@@ -114,7 +67,7 @@ public class PopupButton extends Button implements ComponentContainer {
 	 */
 	public void addComponent(Component c) {
 		component = c;
-		requestRepaint();
+		markAsDirty();
 
 		if (c instanceof ComponentContainer) {
 			// Make sure we're not adding the component inside it's own content
@@ -138,22 +91,17 @@ public class PopupButton extends Button implements ComponentContainer {
 		fireEvent(new ComponentAttachEvent(this, component));
 	}
 
-	public void addListener(ComponentAttachListener listener) {
-		addListener(ComponentContainer.ComponentAttachEvent.class, listener,
-				COMPONENT_ATTACHED_METHOD);
+    public void addComponents(Component... components) {
+        for (Component c : components) {
+            addComponent(c);
+        }
+    }
 
-	}
-
-	public void addListener(ComponentDetachListener listener) {
-		addListener(ComponentContainer.ComponentDetachEvent.class, listener,
-				COMPONENT_DETACHED_METHOD);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.vaadin.ui.ComponentContainer#getComponentIterator()
-	 */
+    /*
+         * (non-Javadoc)
+         *
+         * @see com.vaadin.ui.ComponentContainer#getComponentIterator()
+         */
 	public Iterator<Component> getComponentIterator() {
 		return new Iterator<Component>() {
 
@@ -211,29 +159,7 @@ public class PopupButton extends Button implements ComponentContainer {
 			fireEvent(new ComponentDetachEvent(this, c));
 		}
 		component = null;
-		requestRepaint();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @seecom.vaadin.ui.ComponentContainer#removeListener(com.vaadin.ui.
-	 * ComponentContainer.ComponentAttachListener)
-	 */
-	public void removeListener(ComponentAttachListener listener) {
-		removeListener(ComponentContainer.ComponentAttachEvent.class, listener,
-				COMPONENT_ATTACHED_METHOD);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @seecom.vaadin.ui.ComponentContainer#removeListener(com.vaadin.ui.
-	 * ComponentContainer.ComponentDetachListener)
-	 */
-	public void removeListener(ComponentDetachListener listener) {
-		removeListener(ComponentContainer.ComponentDetachEvent.class, listener,
-				COMPONENT_DETACHED_METHOD);
+		markAsDirty();
 	}
 
 	/**
@@ -247,42 +173,6 @@ public class PopupButton extends Button implements ComponentContainer {
 		throw new UnsupportedOperationException();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.vaadin.ui.ComponentContainer#requestRepaintAll()
-	 */
-	public void requestRepaintAll() {
-		requestRepaint();
-		if (component != null) {
-			if (component instanceof Form) {
-				// Form has children in layout, but is not ComponentContainer
-				component.requestRepaint();
-				((Form) component).getLayout().requestRepaintAll();
-			} else if (component instanceof Table) {
-				((Table) component).requestRepaintAll();
-			} else if (component instanceof ComponentContainer) {
-				((ComponentContainer) component).requestRepaintAll();
-			} else {
-				component.requestRepaint();
-			}
-		}
-	}
-
-	public void attach() {
-		super.attach();
-		if (component != null) {
-			component.attach();
-		}
-	}
-
-	public void detach() {
-		super.detach();
-		if (component != null) {
-			component.detach();
-		}
-	}
-
 	/**
 	 * Shows or hides popup.
 	 * 
@@ -290,10 +180,10 @@ public class PopupButton extends Button implements ComponentContainer {
 	 *            if true, popup is set to visible, otherwise popup is hidden.
 	 */
 	public void setPopupVisible(boolean popupVisible) {
-		if (this.popupVisible != popupVisible) {
-			this.popupVisible = popupVisible;
+		if (getState().popupVisible != popupVisible) {
+			getState().popupVisible = popupVisible;
 			fireEvent(new PopupVisibilityEvent(this));
-			requestRepaint();
+			markAsDirty();
 		}
 	}
 
@@ -303,7 +193,7 @@ public class PopupButton extends Button implements ComponentContainer {
 	 * @return true, if popup is visible, false otherwise.
 	 */
 	public boolean isPopupVisible() {
-		return popupVisible;
+		return getState().popupVisible;
 	}
 
 	/**
@@ -397,5 +287,58 @@ public class PopupButton extends Button implements ComponentContainer {
 		 * @see {@link PopupButton#addPopupVisibilityListener(PopupVisibilityListener)}
 		 */
 		public void popupVisibilityChange(PopupVisibilityEvent event);
+	}
+
+	public boolean isComponentVisible(Component childComponent) {
+		return true;
+	}
+
+	public Iterator<Component> iterator() {
+		return getComponentIterator();
+	}
+
+	public int getComponentCount() {
+		return (component != null ? 1 : 0);
+	}
+	
+	@Override
+	public PopupButtonState getState() {
+		return (PopupButtonState) super.getState();
+	}
+	
+	protected void setPopupPositionComponent(Component component) {
+		getState().popupPositionConnector = component;
+	}
+
+	public void addComponentAttachListener(ComponentAttachListener listener) {
+		addListener(ComponentContainer.ComponentAttachEvent.class, listener, COMPONENT_ATTACHED_METHOD);	
+	}
+
+	public void removeComponentAttachListener(ComponentAttachListener listener) {
+		removeListener(ComponentContainer.ComponentAttachEvent.class, listener, COMPONENT_ATTACHED_METHOD);
+	}
+
+	public void addComponentDetachListener(ComponentDetachListener listener) {
+		addListener(ComponentContainer.ComponentDetachEvent.class, listener, COMPONENT_DETACHED_METHOD);
+	}
+
+	public void removeComponentDetachListener(ComponentDetachListener listener) {
+		removeListener(ComponentContainer.ComponentDetachEvent.class, listener, COMPONENT_DETACHED_METHOD);
+	}
+
+	public void addListener(ComponentAttachListener listener) {
+		addComponentAttachListener(listener);
+	}
+
+	public void removeListener(ComponentAttachListener listener) {
+		removeComponentAttachListener(listener);
+	}
+
+	public void addListener(ComponentDetachListener listener) {
+		addComponentDetachListener(listener);
+	}
+
+	public void removeListener(ComponentDetachListener listener) {
+		removeComponentDetachListener(listener);
 	}
 }
