@@ -14,9 +14,9 @@ import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
 import com.vaadin.client.VCaptionWrapper;
+import com.vaadin.client.ui.VButton;
 import com.vaadin.client.ui.VOverlay;
-import com.vaadin.client.ui.button.VButton;
-import com.vaadin.client.ui.richtextarea.VRichTextArea;
+import com.vaadin.client.ui.VRichTextArea;
 
 // This class contains code from the VPopupView class.  
 public class VPopupButton extends VButton {

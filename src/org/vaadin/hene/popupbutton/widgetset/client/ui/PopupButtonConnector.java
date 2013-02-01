@@ -3,6 +3,8 @@ package org.vaadin.hene.popupbutton.widgetset.client.ui;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.vaadin.client.*;
+import com.vaadin.client.ui.VPopupView;
 import org.vaadin.hene.popupbutton.PopupButton;
 
 import com.google.gwt.core.client.GWT;
@@ -13,24 +15,18 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.user.client.ui.Widget;
-import com.vaadin.client.ComponentConnector;
-import com.vaadin.client.ComponentContainerConnector;
-import com.vaadin.client.ConnectorHierarchyChangeEvent;
 import com.vaadin.client.ConnectorHierarchyChangeEvent.ConnectorHierarchyChangeHandler;
-import com.vaadin.client.VCaption;
-import com.vaadin.client.VCaptionWrapper;
 import com.vaadin.client.communication.RpcProxy;
 import com.vaadin.client.communication.StateChangeEvent;
 import com.vaadin.client.ui.PostLayoutListener;
 import com.vaadin.client.ui.button.ButtonConnector;
-import com.vaadin.client.ui.popupview.VPopupView;
 import com.vaadin.shared.ui.Connect;
 
 
 @SuppressWarnings("serial")
 @Connect(PopupButton.class)
 public class PopupButtonConnector extends ButtonConnector implements
-		ComponentContainerConnector, ConnectorHierarchyChangeHandler,
+    HasComponentsConnector, ConnectorHierarchyChangeHandler,
 		PostLayoutListener, NativePreviewHandler {
 
 	private PopupButtonServerRpc rpc = RpcProxy.create(
@@ -189,32 +185,34 @@ public class PopupButtonConnector extends ButtonConnector implements
 	}
 
 	public void onPreviewNativeEvent(NativePreviewEvent event) {
-		Element target = Element.as(event.getNativeEvent().getEventTarget());
-		switch (event.getTypeInt()) {
-		case Event.ONCLICK:
-			if (getWidget().isOrHasChildOfButton(target)) {
-				rpc.setPopupVisible(false);
-			}
-			break;
-		case Event.ONMOUSEDOWN:
-			if (!getWidget().isOrHasChildOfPopup(target)
-					&& !getWidget().isOrHasChildOfConsole(target)
-					&& !getWidget().isOrHasChildOfButton(target)) {
-				rpc.setPopupVisible(false);
-			}
-			break;
-		case Event.ONKEYPRESS:
-			// if (getWidget().isOrHasChildOfPopup(target)) {
-			// // Catch children that use keyboard, so we can unfocus
-			// // them
-			// // when
-			// // hiding
-			// activeChildren.add(target);
-			// }
-			break;
-		default:
-			break;
-		}
+        if (isEnabled()) {
+            Element target = Element.as(event.getNativeEvent().getEventTarget());
+            switch (event.getTypeInt()) {
+            case Event.ONCLICK:
+                if (getWidget().isOrHasChildOfButton(target)) {
+                    rpc.setPopupVisible(false);
+                }
+                break;
+            case Event.ONMOUSEDOWN:
+                if (!getWidget().isOrHasChildOfPopup(target)
+                        && !getWidget().isOrHasChildOfConsole(target)
+                        && !getWidget().isOrHasChildOfButton(target)) {
+                    rpc.setPopupVisible(false);
+                }
+                break;
+            case Event.ONKEYPRESS:
+                // if (getWidget().isOrHasChildOfPopup(target)) {
+                // // Catch children that use keyboard, so we can unfocus
+                // // them
+                // // when
+                // // hiding
+                // activeChildren.add(target);
+                // }
+                break;
+            default:
+                break;
+            }
+        }
 	}
 
 	@Override

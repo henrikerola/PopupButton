@@ -89,7 +89,7 @@ public class PopupButtonRoot extends UI {
 					public void buttonClick(ClickEvent event) {
 						Window w = new Window();
 						w.center();
-						w.addComponent(createPopupButton());
+						w.setContent(createPopupButton());
 						addWindow(w);
 					}
 				});

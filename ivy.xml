@@ -11,18 +11,18 @@
 	</configurations>
 	<dependencies>
 		<!-- The core server part of Vaadin -->
-		<dependency org="com.vaadin" name="vaadin-server" rev="7.0.0.beta3"
+		<dependency org="com.vaadin" name="vaadin-server" rev="7.0.0.rc2"
 			conf="default->default" />
 
 		<!-- Vaadin themes -->
-		<dependency org="com.vaadin" name="vaadin-themes" rev="7.0.0.beta3" />
+		<dependency org="com.vaadin" name="vaadin-themes" rev="7.0.0.rc2" />
 
 		<!-- Precompiled DefaultWidgetSet -->
 		<dependency org="com.vaadin" name="vaadin-client-compiled"
 			rev="7.0.0.beta3" />
 
 		<!-- Vaadin client side, needed for widget set compilation -->
-		<dependency org="com.vaadin" name="vaadin-client" rev="7.0.0.beta3" />
+		<dependency org="com.vaadin" name="vaadin-client" rev="7.0.0.rc2" />
 
 		<!-- Compiler for custom widget sets. Should not be deployed -->
 		<dependency org="com.vaadin" name="vaadin-client-compiler"
