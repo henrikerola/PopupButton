@@ -57,7 +57,7 @@ public class PopupButtonConnector extends ButtonConnector implements
 
 	@Override
 	public void onClick(ClickEvent event) {
-		if (!popupVisible) {
+		if (!popupVisible && isEnabled()) {
 			rpc.setPopupVisible(true);
 		}
 		super.onClick(event);
