@@ -2,6 +2,7 @@ package org.vaadin.hene.popupbutton;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
+import java.util.Collections;
 import java.util.Iterator;
 
 import org.vaadin.hene.popupbutton.widgetset.client.ui.PopupButtonServerRpc;
@@ -43,10 +44,10 @@ public class PopupButton extends Button implements SingleComponentContainer {
 	protected int xOffset = 0;
 	protected int yOffset = 0;
 	protected boolean popupFixedPosition;
-	//protected Paintable popupPositionPaintable; //FIXME
-	
+	// protected Paintable popupPositionPaintable; //FIXME
+
 	private PopupButtonServerRpc rpc = new PopupButtonServerRpc() {
-		
+
 		public void setPopupVisible(boolean visible) {
 			PopupButton.this.setPopupVisible(visible);
 		}
@@ -61,80 +62,13 @@ public class PopupButton extends Button implements SingleComponentContainer {
 		registerRpc(rpc);
 	}
 
-    /*
-         * (non-Javadoc)
-         *
-         * @see com.vaadin.ui.ComponentContainer#getComponentIterator()
-         */
-	public Iterator<Component> getComponentIterator() {
-		return new Iterator<Component>() {
-
-			private boolean first = component == null;
-
-			public boolean hasNext() {
-				return !first;
-			}
-
-			public Component next() {
-				if (!first) {
-					first = true;
-					return component;
-				} else {
-					return null;
-				}
-			}
-
-			public void remove() {
-				throw new UnsupportedOperationException();
-			}
-		};
-	}
-
-	/**
-	 * Not supported in this implementation.
-	 * 
-	 * @see com.vaadin.ui.ComponentContainer#moveComponentsFrom(com.vaadin.ui.
-	 *      ComponentContainer)
-	 */
-	public void moveComponentsFrom(ComponentContainer source) {
-		throw new UnsupportedOperationException();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.vaadin.ui.ComponentContainer#removeAllComponents()
-	 */
-	public void removeAllComponents() {
+	@Override
+	public Iterator<Component> iterator() {
 		if (component != null) {
-			removeComponent(component);
+			return Collections.singletonList(component).iterator();
+		} else {
+			return Collections.<Component> emptyList().iterator();
 		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.vaadin.ui.ComponentContainer#removeComponent(com.vaadin.ui.Component)
-	 */
-	public void removeComponent(Component c) {
-		if (c.getParent() == this) {
-			c.setParent(null);
-			fireEvent(new ComponentDetachEvent(this, c));
-		}
-		component = null;
-		markAsDirty();
-	}
-
-	/**
-	 * 
-	 * Not supported in this implementation.
-	 * 
-	 * @see com.vaadin.ui.ComponentContainer#replaceComponent(com.vaadin.ui.Component,
-	 *      com.vaadin.ui.Component)
-	 */
-	public void replaceComponent(Component oldComponent, Component newComponent) {
-		throw new UnsupportedOperationException();
 	}
 
 	/**
@@ -171,7 +105,7 @@ public class PopupButton extends Button implements SingleComponentContainer {
 	public void setComponent(Component component) {
 		setContent(component);
 	}
-	
+
 	@Override
 	public Component getContent() {
 		return component;
@@ -180,23 +114,23 @@ public class PopupButton extends Button implements SingleComponentContainer {
 	@Override
 	public void setContent(Component content) {
 		Component oldContent = getContent();
-        if (oldContent == content) {
-            // do not set the same content twice
-            return;
-        }
-        if (oldContent != null && oldContent.getParent() == this) {
-            oldContent.setParent(null);
-            fireEvent(new ComponentDetachEvent(this, content));
-        }
-        this.component = content;
-        if (content != null) {
-            AbstractSingleComponentContainer.removeFromParent(content);
+		if (oldContent == content) {
+			// do not set the same content twice
+			return;
+		}
+		if (oldContent != null && oldContent.getParent() == this) {
+			oldContent.setParent(null);
+			fireEvent(new ComponentDetachEvent(this, content));
+		}
+		this.component = content;
+		if (content != null) {
+			AbstractSingleComponentContainer.removeFromParent(content);
 
-            content.setParent(this);
-            fireEvent(new ComponentAttachEvent(this, content));
-        }
+			content.setParent(this);
+			fireEvent(new ComponentAttachEvent(this, content));
+		}
 
-        markAsDirty();
+		markAsDirty();
 	}
 
 	/**
@@ -282,56 +216,41 @@ public class PopupButton extends Button implements SingleComponentContainer {
 		public void popupVisibilityChange(PopupVisibilityEvent event);
 	}
 
-	public boolean isComponentVisible(Component childComponent) {
-		return true;
-	}
-
-	public Iterator<Component> iterator() {
-		return getComponentIterator();
-	}
-
+	@Override
 	public int getComponentCount() {
 		return (component != null ? 1 : 0);
 	}
-	
+
 	@Override
 	public PopupButtonState getState() {
 		return (PopupButtonState) super.getState();
 	}
-	
+
 	protected void setPopupPositionComponent(Component component) {
 		getState().popupPositionConnector = component;
 	}
 
+	@Override
 	public void addComponentAttachListener(ComponentAttachListener listener) {
-		addListener(ComponentContainer.ComponentAttachEvent.class, listener, COMPONENT_ATTACHED_METHOD);	
+		addListener(ComponentContainer.ComponentAttachEvent.class, listener,
+				COMPONENT_ATTACHED_METHOD);
 	}
 
+	@Override
 	public void removeComponentAttachListener(ComponentAttachListener listener) {
-		removeListener(ComponentContainer.ComponentAttachEvent.class, listener, COMPONENT_ATTACHED_METHOD);
+		removeListener(ComponentContainer.ComponentAttachEvent.class, listener,
+				COMPONENT_ATTACHED_METHOD);
 	}
 
+	@Override
 	public void addComponentDetachListener(ComponentDetachListener listener) {
-		addListener(ComponentContainer.ComponentDetachEvent.class, listener, COMPONENT_DETACHED_METHOD);
+		addListener(ComponentContainer.ComponentDetachEvent.class, listener,
+				COMPONENT_DETACHED_METHOD);
 	}
 
+	@Override
 	public void removeComponentDetachListener(ComponentDetachListener listener) {
-		removeListener(ComponentContainer.ComponentDetachEvent.class, listener, COMPONENT_DETACHED_METHOD);
-	}
-
-	public void addListener(ComponentAttachListener listener) {
-		addComponentAttachListener(listener);
-	}
-
-	public void removeListener(ComponentAttachListener listener) {
-		removeComponentAttachListener(listener);
-	}
-
-	public void addListener(ComponentDetachListener listener) {
-		addComponentDetachListener(listener);
-	}
-
-	public void removeListener(ComponentDetachListener listener) {
-		removeComponentDetachListener(listener);
+		removeListener(ComponentContainer.ComponentDetachEvent.class, listener,
+				COMPONENT_DETACHED_METHOD);
 	}
 }
