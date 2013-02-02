@@ -7,16 +7,18 @@ import java.util.Iterator;
 import org.vaadin.hene.popupbutton.widgetset.client.ui.PopupButtonServerRpc;
 import org.vaadin.hene.popupbutton.widgetset.client.ui.PopupButtonState;
 
-import com.vaadin.util.ReflectTools;
+import com.vaadin.ui.AbstractSingleComponentContainer;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.ComponentContainer;
+import com.vaadin.ui.SingleComponentContainer;
+import com.vaadin.util.ReflectTools;
 
 /**
  * Server side component for the VPopupButton widget.
  */
 // This class contains code from AbstractComponentContainer
-public class PopupButton extends Button implements ComponentContainer {
+public class PopupButton extends Button implements SingleComponentContainer {
 
 	private static final long serialVersionUID = -3148268967211155218L;
 
@@ -58,44 +60,6 @@ public class PopupButton extends Button implements ComponentContainer {
 		super(caption);
 		registerRpc(rpc);
 	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.vaadin.ui.ComponentContainer#addComponent(com.vaadin.ui.Component)
-	 */
-	public void addComponent(Component c) {
-		component = c;
-		markAsDirty();
-
-		if (c instanceof ComponentContainer) {
-			// Make sure we're not adding the component inside it's own content
-			for (Component parent = this; parent != null; parent = parent
-					.getParent()) {
-				if (parent == c) {
-					throw new IllegalArgumentException(
-							"Component cannot be added inside it's own content");
-				}
-			}
-		}
-
-		if (c.getParent() != null) {
-			// If the component already has a parent, try to remove it
-			ComponentContainer oldParent = (ComponentContainer) c.getParent();
-			oldParent.removeComponent(c);
-
-		}
-
-		c.setParent(this);
-		fireEvent(new ComponentAttachEvent(this, component));
-	}
-
-    public void addComponents(Component... components) {
-        for (Component c : components) {
-            addComponent(c);
-        }
-    }
 
     /*
          * (non-Javadoc)
@@ -201,9 +165,38 @@ public class PopupButton extends Button implements ComponentContainer {
 	 * 
 	 * @param component
 	 *            the component to be displayed in the popup.
+	 * @deprecated Use {@link setContent(Component content)} instead
 	 */
+	@Deprecated
 	public void setComponent(Component component) {
-		addComponent(component);
+		setContent(component);
+	}
+	
+	@Override
+	public Component getContent() {
+		return component;
+	}
+
+	@Override
+	public void setContent(Component content) {
+		Component oldContent = getContent();
+        if (oldContent == content) {
+            // do not set the same content twice
+            return;
+        }
+        if (oldContent != null && oldContent.getParent() == this) {
+            oldContent.setParent(null);
+            fireEvent(new ComponentDetachEvent(this, content));
+        }
+        this.component = content;
+        if (content != null) {
+            AbstractSingleComponentContainer.removeFromParent(content);
+
+            content.setParent(this);
+            fireEvent(new ComponentAttachEvent(this, content));
+        }
+
+        markAsDirty();
 	}
 
 	/**
