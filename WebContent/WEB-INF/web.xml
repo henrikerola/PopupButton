@@ -12,7 +12,7 @@
   	<servlet-class>com.vaadin.server.VaadinServlet</servlet-class>
   	<init-param>
   		<param-name>ui</param-name>
-  		<param-value>org.vaadin.hene.popupbutton.PopupButtonRoot</param-value>
+  		<param-value>org.vaadin.hene.popupbutton.PopupButtonUI</param-value>
   	</init-param>
   	<init-param>
   		<description>

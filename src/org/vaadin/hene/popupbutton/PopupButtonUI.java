@@ -20,7 +20,7 @@ import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.Reindeer;
 
 @SuppressWarnings("serial")
-public class PopupButtonRoot extends UI {
+public class PopupButtonUI extends UI {
 
 	@Override
 	protected void init(VaadinRequest request) {
@@ -81,7 +81,7 @@ public class PopupButtonRoot extends UI {
 		PopupButton comboBoxButton = new PopupButton("ComboBox in Popup");
 		ComboBox cb = new ComboBox();
 		cb.setInputPrompt("ComboBox");
-		comboBoxButton.addComponent(cb);
+		comboBoxButton.setContent(cb);
 		horizontalLayout.addComponent(comboBoxButton);
 
 		Button openSubwindowButton = new Button("Open subwindow",
@@ -122,7 +122,7 @@ public class PopupButtonRoot extends UI {
 		gl.addComponent(createIconButton("../runo/icons/32/document-image.png"));
 		gl.addComponent(createIconButton("../runo/icons/32/document-txt.png"));
 
-		popupButton.addComponent(gl);
+		popupButton.setContent(gl);
 		return popupButton;
 	}
 
