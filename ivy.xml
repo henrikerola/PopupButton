@@ -19,14 +19,14 @@
 
 		<!-- Precompiled DefaultWidgetSet -->
 		<dependency org="com.vaadin" name="vaadin-client-compiled"
-			rev="7.0.0.beta3" />
+			rev="7.0.0.rc2" />
 
 		<!-- Vaadin client side, needed for widget set compilation -->
 		<dependency org="com.vaadin" name="vaadin-client" rev="7.0.0.rc2" />
 
 		<!-- Compiler for custom widget sets. Should not be deployed -->
 		<dependency org="com.vaadin" name="vaadin-client-compiler"
-			rev="7.0.0.beta3" conf="widgetset-compile->default" />
+			rev="7.0.0.rc2" conf="widgetset-compile->default" />
 	</dependencies>
 </ivy-module>
     
