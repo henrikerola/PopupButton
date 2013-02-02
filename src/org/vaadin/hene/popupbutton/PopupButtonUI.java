@@ -13,6 +13,7 @@ import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Notification;
+import com.vaadin.ui.Table;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
@@ -83,6 +84,15 @@ public class PopupButtonUI extends UI {
 		cb.setInputPrompt("ComboBox");
 		comboBoxButton.setContent(cb);
 		horizontalLayout.addComponent(comboBoxButton);
+		
+		PopupButton tableButton = new PopupButton("Table in Popup");
+		Table table = new Table();
+		table.addContainerProperty("property1", String.class, "-");
+		table.addContainerProperty("property2", String.class, "-");
+		table.addItem();
+		tableButton.setContent(table);
+		horizontalLayout.addComponent(tableButton);
+		
 
 		Button openSubwindowButton = new Button("Open subwindow",
 				new ClickListener() {

@@ -238,7 +238,7 @@ public class VPopupButton extends VButton {
 		super.onDetach();
 		hidePopup();
 	}
-	
+
 	public boolean isOrHasChildOfPopup(Element element) {
 		return popup.getElement().isOrHasChild(element);
 	}
@@ -247,12 +247,16 @@ public class VPopupButton extends VButton {
 		return getElement().isOrHasChild(element);
 	}
 
-// Unclear what should happen here. ApplicationConnection.getConsole() gone
+	// Unclear what should happen here. ApplicationConnection.getConsole() gone
 	public boolean isOrHasChildOfConsole(Element element) {
-//		Console console = ApplicationConnection.getConsole();
-//		return console instanceof VDebugConsole
-//				&& ((VDebugConsole) console).getElement().isOrHasChild(
-//						element);
+		// Console console = ApplicationConnection.getConsole();
+		// return console instanceof VDebugConsole
+		// && ((VDebugConsole) console).getElement().isOrHasChild(
+		// element);
 		return false;
+	}
+
+	public void setPopupInvisible() {
+		popup.setVisible(false);
 	}
 }
