@@ -139,6 +139,7 @@ public class VPopupButton extends VButton {
 
 		public LayoutPopup() {
 			super(false, false, true);
+			setOwner(VPopupButton.this);
 			setStyleName(CLASSNAME);
 		}
 
