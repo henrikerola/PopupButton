@@ -91,11 +91,17 @@ public class PopupButton extends Button implements ComponentContainer {
 		fireEvent(new ComponentAttachEvent(this, component));
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.vaadin.ui.ComponentContainer#getComponentIterator()
-	 */
+    public void addComponents(Component... components) {
+        for (Component c : components) {
+            addComponent(c);
+        }
+    }
+
+    /*
+         * (non-Javadoc)
+         *
+         * @see com.vaadin.ui.ComponentContainer#getComponentIterator()
+         */
 	public Iterator<Component> getComponentIterator() {
 		return new Iterator<Component>() {
 
