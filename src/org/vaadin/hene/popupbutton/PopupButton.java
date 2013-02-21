@@ -23,20 +23,20 @@ public class PopupButton extends Button implements SingleComponentContainer {
 
 	private static final long serialVersionUID = -3148268967211155218L;
 
-	private static final Method COMPONENT_ATTACHED_METHOD = ReflectTools
+	protected static final Method COMPONENT_ATTACHED_METHOD = ReflectTools
 			.findMethod(ComponentAttachListener.class,
 					"componentAttachedToContainer", ComponentAttachEvent.class);
 
-	private static final Method COMPONENT_DETACHED_METHOD = ReflectTools
+	protected static final Method COMPONENT_DETACHED_METHOD = ReflectTools
 			.findMethod(ComponentDetachListener.class,
 					"componentDetachedFromContainer",
 					ComponentDetachEvent.class);
 
-	private static final Method POPUP_VISIBILITY_METHOD = ReflectTools
+	protected static final Method POPUP_VISIBILITY_METHOD = ReflectTools
 			.findMethod(PopupVisibilityListener.class, "popupVisibilityChange",
 					PopupVisibilityEvent.class);
 
-	private Component component;
+	protected Component component;
 
 	// These can be used by extending PopupButton.
 	// It's possible that these are removed in future versions or functionality
@@ -46,7 +46,7 @@ public class PopupButton extends Button implements SingleComponentContainer {
 	protected boolean popupFixedPosition;
 	// protected Paintable popupPositionPaintable; //FIXME
 
-	private PopupButtonServerRpc rpc = new PopupButtonServerRpc() {
+	protected PopupButtonServerRpc rpc = new PopupButtonServerRpc() {
 
 		public void setPopupVisible(boolean visible) {
 			PopupButton.this.setPopupVisible(visible);
