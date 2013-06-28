@@ -11,22 +11,22 @@
 	</configurations>
 	<dependencies>
 		<!-- The core server part of Vaadin -->
-		<dependency org="com.vaadin" name="vaadin-server" rev="7.0.0.rc2"
+		<dependency org="com.vaadin" name="vaadin-server" rev="7.1.0"
 			conf="default->default" />
 
 		<!-- Vaadin themes -->
-		<dependency org="com.vaadin" name="vaadin-themes" rev="7.0.0.rc2" />
+		<dependency org="com.vaadin" name="vaadin-themes" rev="7.1.0" />
 
 		<!-- Precompiled DefaultWidgetSet -->
 		<dependency org="com.vaadin" name="vaadin-client-compiled"
-			rev="7.0.0.rc2" />
+			rev="7.1.0" />
 
 		<!-- Vaadin client side, needed for widget set compilation -->
-		<dependency org="com.vaadin" name="vaadin-client" rev="7.0.0.rc2" />
+		<dependency org="com.vaadin" name="vaadin-client" rev="7.1.0" />
 
 		<!-- Compiler for custom widget sets. Should not be deployed -->
 		<dependency org="com.vaadin" name="vaadin-client-compiler"
-			rev="7.0.0.rc2" conf="widgetset-compile->default" />
+			rev="7.1.0" conf="widgetset-compile->default" />
 	</dependencies>
 </ivy-module>
     
