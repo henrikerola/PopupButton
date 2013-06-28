@@ -28,13 +28,13 @@ public class VPopupButton extends VButton {
 
 	public static final String POPUP_INDICATOR_CLASSNAME = "v-popup-indicator";
 
-	final LayoutPopup popup = new LayoutPopup();
+	protected final LayoutPopup popup = new LayoutPopup();
 
-	String position = "auto";
+	protected String position = "auto";
 
-	int xOffset = 0;
+	protected int xOffset = 0;
 
-	int yOffset = 0;
+	protected int yOffset = 0;
 
 	protected Widget popupPositionWidget;
 
@@ -53,7 +53,7 @@ public class VPopupButton extends VButton {
 		}
 	}
 
-	void showPopup() {
+	protected void showPopup() {
 		Scheduler.get().scheduleDeferred(new ScheduledCommand() {
 
 			public void execute() {
@@ -118,19 +118,19 @@ public class VPopupButton extends VButton {
 		});
 	}
 
-	void hidePopup() {
+	protected void hidePopup() {
 		popup.setVisible(false);
 		popup.hide();
 	}
 
-	private static native void nativeBlur(Element e)
+	protected static native void nativeBlur(Element e)
 	/*-{
 	    if (e && e.blur) {
 	        e.blur();
 	    }
 	}-*/;
 
-	class LayoutPopup extends VOverlay {
+	protected class LayoutPopup extends VOverlay {
 
 		public static final String CLASSNAME = VPopupButton.CLASSNAME
 				+ "-popup";

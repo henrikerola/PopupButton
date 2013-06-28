@@ -32,12 +32,12 @@ public class PopupButtonConnector extends ButtonConnector implements
 		HasComponentsConnector, ConnectorHierarchyChangeHandler,
 		PostLayoutListener, NativePreviewHandler {
 
-	private PopupButtonServerRpc rpc = RpcProxy.create(
+	protected PopupButtonServerRpc rpc = RpcProxy.create(
 			PopupButtonServerRpc.class, this);
 
-	private boolean popupVisible = false;
+	protected boolean popupVisible = false;
 
-	private HandlerRegistration nativePreviewHandler;
+	protected HandlerRegistration nativePreviewHandler;
 
 	public PopupButtonConnector() {
 		addConnectorHierarchyChangeHandler(this);
