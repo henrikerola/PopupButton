@@ -2,9 +2,9 @@ Manifest-Version: 1.0
 Vaadin-License-Title: Apache License 2.0
 Implementation-Vendor: Henri Kerola / Vaadin Ltd
 Implementation-Title: PopupButton
-Implementation-Version: 2.2.0
+Implementation-Version: 2.2.1
 Vaadin-Package-Version: 1
+Class-Path: 
 Vaadin-Widgetsets: org.vaadin.hene.popupbutton.widgetset.PopupbuttonWi
  dgetset
-Class-Path: 
 
