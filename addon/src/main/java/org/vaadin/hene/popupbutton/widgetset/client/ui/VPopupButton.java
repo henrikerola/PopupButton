@@ -1,9 +1,5 @@
 package org.vaadin.hene.popupbutton.widgetset.client.ui;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.DivElement;
@@ -19,6 +15,10 @@ import com.vaadin.client.VCaptionWrapper;
 import com.vaadin.client.ui.VButton;
 import com.vaadin.client.ui.VOverlay;
 import com.vaadin.client.ui.VRichTextArea;
+
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 // This class contains code from the VPopupView class.  
 public class VPopupButton extends VButton {

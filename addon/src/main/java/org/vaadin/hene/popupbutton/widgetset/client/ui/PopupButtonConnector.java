@@ -1,10 +1,5 @@
 package org.vaadin.hene.popupbutton.widgetset.client.ui;
 
-import java.util.Collections;
-import java.util.List;
-
-import org.vaadin.hene.popupbutton.PopupButton;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -13,18 +8,18 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.user.client.ui.Widget;
-import com.vaadin.client.ComponentConnector;
-import com.vaadin.client.ConnectorHierarchyChangeEvent;
+import com.vaadin.client.*;
 import com.vaadin.client.ConnectorHierarchyChangeEvent.ConnectorHierarchyChangeHandler;
-import com.vaadin.client.HasComponentsConnector;
-import com.vaadin.client.VCaption;
-import com.vaadin.client.VCaptionWrapper;
 import com.vaadin.client.communication.RpcProxy;
 import com.vaadin.client.communication.StateChangeEvent;
 import com.vaadin.client.ui.PostLayoutListener;
 import com.vaadin.client.ui.VPopupView;
 import com.vaadin.client.ui.button.ButtonConnector;
 import com.vaadin.shared.ui.Connect;
+import org.vaadin.hene.popupbutton.PopupButton;
+
+import java.util.Collections;
+import java.util.List;
 
 @SuppressWarnings("serial")
 @Connect(PopupButton.class)
