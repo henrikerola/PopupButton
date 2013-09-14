@@ -19,7 +19,7 @@
     See https://vaadin.com/wiki/-/wiki/Main/Using%20SuperDevMode for more
     information and instructions.
     -->
-    <!-- <set-configuration-property name="devModeRedirectEnabled" value="true" /> -->
+    <set-configuration-property name="devModeRedirectEnabled" value="true" />
 
     <inherits name="com.vaadin.DefaultWidgetSet" />
 
@@ -27,5 +27,4 @@
 
     <inherits name="org.vaadin.hene.popupbutton.widgetset.PopupbuttonWidgetset" />
 
-    <set-configuration-property name="devModeRedirectEnabled" value="true"/>
 </module>

@@ -1,25 +1,25 @@
 import org.vaadin.sbt.VaadinPlugin._
 
-import org.vaadin.sbt.VaadinKeys._
-
 name := "PopupButton"
 
-version := "2.3-SNAPSHOT"
+version in ThisBuild := "2.3-SNAPSHOT"
 
-organization := "org.vaadin.hene"
+organization in ThisBuild := "org.vaadin.hene"
+
+crossPaths in ThisBuild := false
 
 lazy val root = project.in(file(".")).aggregate(addon, demo)
 
-lazy val addon = project.settings(vaadinAddOnSettings :_*)settings(
+lazy val addon = project.settings(vaadinAddOnSettings :_*).settings(
   name := "PopupButton",
   libraryDependencies := Dependencies.addonDeps
-  //widgetsets in compileWidgetsets := Seq("org.vaadin.hene.popupbutton.widgetset.PopupbuttonWidgetset")
 )
 
-lazy val demo = project.settings(vaadinSettings :_*).settings(
+lazy val demo = project.settings(vaadinWebSettings :_*).settings(
   name := "popupbutton-demo",
+  artifactName := { (sv: ScalaVersion, module: ModuleID, artifact: Artifact) => "PopupButton." + artifact.extension },
   libraryDependencies := Dependencies.demoDeps,
-  //widgetsets in compileWidgetsets := Seq("org.vaadin.hene.popupbutton.widgetset.PopupbuttonDemoWidgetset"),
   javaOptions in compileWidgetsets := Seq("-Xss8M", "-Xmx512M", "-XX:MaxPermSize=512M"),
-  options in compileWidgetsets := Seq("-strict", "-draftCompile")
+  options in compileWidgetsets := Seq("-strict", "-draftCompile"),
+  javaOptions in devMode ++= Seq("-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005")
 ).dependsOn(addon)
