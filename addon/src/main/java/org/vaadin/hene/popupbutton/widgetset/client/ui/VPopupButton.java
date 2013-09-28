@@ -12,12 +12,15 @@ import com.google.gwt.user.client.ui.Widget;
 import com.vaadin.client.ComponentConnector;
 import com.vaadin.client.Util;
 import com.vaadin.client.VCaptionWrapper;
+import com.vaadin.client.debug.internal.VDebugWindow;
 import com.vaadin.client.ui.VButton;
 import com.vaadin.client.ui.VOverlay;
+import com.vaadin.client.ui.VPopupView;
 import com.vaadin.client.ui.VRichTextArea;
 
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 // This class contains code from the VPopupView class.  
@@ -37,6 +40,8 @@ public class VPopupButton extends VButton {
 	int yOffset = 0;
 
 	protected Widget popupPositionWidget;
+
+    private final Set<Element> activeChildren = new HashSet<Element>();
 
 	public VPopupButton() {
 		super();
@@ -130,12 +135,14 @@ public class VPopupButton extends VButton {
 	    }
 	}-*/;
 
-	class LayoutPopup extends VOverlay {
+    public void sync() {
+        popup.syncChildren();
+    }
+
+    class LayoutPopup extends VOverlay {
 
 		public static final String CLASSNAME = VPopupButton.CLASSNAME
 				+ "-popup";
-
-		private final Set<Element> activeChildren = new HashSet<Element>();
 
 		private boolean hiding = false;
 
@@ -206,6 +213,7 @@ public class VPopupButton extends VButton {
 				try {
 					nativeBlur(e);
 				} catch (Exception ignored) {
+                    Window.alert("" + ignored);
 				}
 			}
 			activeChildren.clear();
@@ -245,23 +253,49 @@ public class VPopupButton extends VButton {
 	}
 
 	public boolean isOrHasChildOfPopup(Element element) {
-		return popup.getElement().isOrHasChild(element);
+		return popup.getElement().isOrHasChild(element) || isAlsoInOverlay(element);
 	}
 
-	public boolean isOrHasChildOfButton(Element element) {
+    private boolean isAlsoInOverlay(Element element) {
+        Element overlayHolder = popup.getElement().getParentElement();
+        if (overlayHolder != null) {
+            return overlayHolder.isOrHasChild(element);
+        }
+        return false;
+    }
+
+    public boolean isOrHasChildOfButton(Element element) {
 		return getElement().isOrHasChild(element);
 	}
 
-	// Unclear what should happen here. ApplicationConnection.getConsole() gone
 	public boolean isOrHasChildOfConsole(Element element) {
-		// Console console = ApplicationConnection.getConsole();
-		// return console instanceof VDebugConsole
-		// && ((VDebugConsole) console).getElement().isOrHasChild(
-		// element);
-		return false;
+        return VDebugWindow.get().getElement().isOrHasChild(element);
 	}
 
-	public void setPopupInvisible() {
-		popup.setVisible(false);
-	}
+    public void setPopupStyleNames(List<String> styleNames) {
+        if (styleNames != null && !styleNames.isEmpty()) {
+            final StringBuffer styleBuf = new StringBuffer();
+            final String primaryName = popup.getStylePrimaryName();
+            styleBuf.append(primaryName);
+            styleBuf.append(" ");
+            styleBuf.append(VPopupView.CLASSNAME + "-popup");
+            for (String style : styleNames) {
+                styleBuf.append(" ");
+                styleBuf.append(primaryName);
+                styleBuf.append("-");
+                styleBuf.append(style);
+            }
+            popup.setStyleName(styleBuf.toString());
+        } else {
+            popup.setStyleName(popup
+                    .getStylePrimaryName()
+                    + " "
+                    + VPopupView.CLASSNAME
+                    + "-popup");
+        }
+    }
+
+    public void addToActiveChildren(Element e) {
+        activeChildren.add(e);
+    }
 }

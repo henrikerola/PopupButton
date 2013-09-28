@@ -1,5 +1,6 @@
 package org.vaadin.hene.popupbutton;
 
+import com.vaadin.data.Property;
 import org.vaadin.hene.popupbutton.PopupButton.PopupVisibilityEvent;
 import org.vaadin.hene.popupbutton.PopupButton.PopupVisibilityListener;
 
@@ -38,7 +39,16 @@ public class PopupButtonUI extends UI {
 		horizontalLayout.addComponent(createPopupButton());
 
 		PopupButton textCaptionButton = new PopupButton("Caption only");
+        textCaptionButton.setStyleName("style1");
+        textCaptionButton.addStyleName("style2");
 		final TextArea textArea = new TextArea("Multi-line TextField");
+        textArea.setImmediate(true);
+        textArea.addValueChangeListener(new Property.ValueChangeListener() {
+            @Override
+            public void valueChange(Property.ValueChangeEvent event) {
+                Notification.show("" + event.getProperty().getValue());
+            }
+        });
 		textArea.setRows(10);
 		textCaptionButton.setComponent(textArea);
 		horizontalLayout.addComponent(textCaptionButton);
@@ -84,7 +94,7 @@ public class PopupButtonUI extends UI {
 		cb.setInputPrompt("ComboBox");
 		comboBoxButton.setContent(cb);
 		horizontalLayout.addComponent(comboBoxButton);
-		
+
 		PopupButton tableButton = new PopupButton("Table in Popup");
 		Table table = new Table();
 		table.addContainerProperty("property1", String.class, "-");
@@ -92,7 +102,7 @@ public class PopupButtonUI extends UI {
 		table.addItem();
 		tableButton.setContent(table);
 		horizontalLayout.addComponent(tableButton);
-		
+
 
 		Button openSubwindowButton = new Button("Open subwindow",
 				new ClickListener() {
@@ -104,6 +114,8 @@ public class PopupButtonUI extends UI {
 					}
 				});
 		horizontalLayout.addComponent(openSubwindowButton);
+
+        horizontalLayout.addComponent(new PopupButton("No content"));
 
 		Alignment[] aligns = new Alignment[] { Alignment.TOP_RIGHT,
 				Alignment.BOTTOM_LEFT, Alignment.BOTTOM_RIGHT };

@@ -64,7 +64,7 @@ public class PopupButton extends Button implements SingleComponentContainer {
 
 	@Override
 	public Iterator<Component> iterator() {
-		if (component != null) {
+		if (isPopupVisible() && component != null) {
 			return Collections.singletonList(component).iterator();
 		} else {
 			return Collections.<Component> emptyList().iterator();
@@ -80,6 +80,23 @@ public class PopupButton extends Button implements SingleComponentContainer {
 	public void setPopupVisible(boolean popupVisible) {
 		if (getState().popupVisible != popupVisible) {
 			getState().popupVisible = popupVisible;
+
+            if (component == null) {
+                return;
+            }
+
+            if (popupVisible) {
+                if (component.getParent() != null && component.getParent() != this) {
+                    // If the component already has a parent, try to remove it
+                    AbstractSingleComponentContainer
+                            .removeFromParent(component);
+                }
+                component.setParent(this);
+            } else {
+                if (component.getParent() == this) {
+                    component.setParent(null);
+                }
+            }
 			fireEvent(new PopupVisibilityEvent(this));
 			markAsDirty();
 		}
@@ -113,23 +130,7 @@ public class PopupButton extends Button implements SingleComponentContainer {
 
 	@Override
 	public void setContent(Component content) {
-		Component oldContent = getContent();
-		if (oldContent == content) {
-			// do not set the same content twice
-			return;
-		}
-		if (oldContent != null && oldContent.getParent() == this) {
-			oldContent.setParent(null);
-			fireEvent(new ComponentDetachEvent(this, content));
-		}
-		this.component = content;
-		if (content != null) {
-			AbstractSingleComponentContainer.removeFromParent(content);
-
-			content.setParent(this);
-			fireEvent(new ComponentAttachEvent(this, content));
-		}
-
+        component = content;
 		markAsDirty();
 	}
 
