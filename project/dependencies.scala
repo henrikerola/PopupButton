@@ -3,7 +3,7 @@ import sbt.Keys._
 
 object Dependencies {
 
-  val vaadinVersion = "7.1.6"
+  val vaadinVersion = "7.1.7"
 
   val vaadinServer = "com.vaadin" % "vaadin-server" % vaadinVersion
   val vaadinClient = "com.vaadin" % "vaadin-client" % vaadinVersion
