@@ -12,15 +12,12 @@ import com.vaadin.client.*;
 import com.vaadin.client.ConnectorHierarchyChangeEvent.ConnectorHierarchyChangeHandler;
 import com.vaadin.client.communication.RpcProxy;
 import com.vaadin.client.communication.StateChangeEvent;
-import com.vaadin.client.ui.VPopupView;
 import com.vaadin.client.ui.button.ButtonConnector;
 import com.vaadin.shared.ui.Connect;
 import org.vaadin.hene.popupbutton.PopupButton;
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @SuppressWarnings("serial")
 @Connect(PopupButton.class)
@@ -68,7 +65,7 @@ public class PopupButtonConnector extends ButtonConnector implements
 	}
 
 	public void onConnectorHierarchyChange(ConnectorHierarchyChangeEvent event) {
-		if (childrenComponentConnector == null) {
+		if (getChildComponents().isEmpty()) {
             getWidget().hidePopup();
 			getWidget().popup.setWidget(null);
 		} else {

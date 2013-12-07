@@ -64,7 +64,7 @@ public class PopupButton extends Button implements SingleComponentContainer {
 
 	@Override
 	public Iterator<Component> iterator() {
-		if (isPopupVisible() && component != null) {
+		if (isPopupVisible() && getContent() != null) {
 			return Collections.singletonList(component).iterator();
 		} else {
 			return Collections.<Component> emptyList().iterator();
@@ -219,7 +219,7 @@ public class PopupButton extends Button implements SingleComponentContainer {
 
 	@Override
 	public int getComponentCount() {
-		return (component != null ? 1 : 0);
+		return (isPopupVisible() && getContent() != null ? 1 : 0);
 	}
 
 	@Override
