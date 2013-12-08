@@ -1,24 +1,15 @@
 package org.vaadin.hene.popupbutton;
 
 import com.vaadin.data.Property;
+import com.vaadin.event.ShortcutAction;
+import com.vaadin.ui.*;
 import org.vaadin.hene.popupbutton.PopupButton.PopupVisibilityEvent;
 import org.vaadin.hene.popupbutton.PopupButton.PopupVisibilityListener;
 
 import com.vaadin.server.ThemeResource;
 import com.vaadin.server.VaadinRequest;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.GridLayout;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Notification;
-import com.vaadin.ui.Table;
-import com.vaadin.ui.TextArea;
-import com.vaadin.ui.UI;
-import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.Reindeer;
 
 @SuppressWarnings("serial")
@@ -49,6 +40,14 @@ public class PopupButtonUI extends UI {
                 Notification.show("" + event.getProperty().getValue());
             }
         });
+        textCaptionButton.addPopupVisibilityListener(new PopupVisibilityListener() {
+            @Override
+            public void popupVisibilityChange(PopupVisibilityEvent event) {
+                if (event.isPopupVisible()) {
+                    textArea.focus();
+                }
+            }
+        });
 		textArea.setRows(10);
 		textCaptionButton.setComponent(textArea);
 		horizontalLayout.addComponent(textCaptionButton);
@@ -75,7 +74,14 @@ public class PopupButtonUI extends UI {
 		userLayout.addComponent(removeUser);
 		userLayout.setComponentAlignment(removeUser, Alignment.MIDDLE_LEFT);
 
-		PopupButton listenerButton = createPopupButton();
+		PopupButton listenerButton = new PopupButton();
+        final Button b = new Button("Click me!", new ClickListener() {
+            @Override
+            public void buttonClick(ClickEvent event) {
+                Notification.show("Button clicked!");
+            }
+        });
+        listenerButton.setContent(b);
 		listenerButton.setCaption("VisibilityListener");
 		listenerButton
 				.addPopupVisibilityListener(new PopupVisibilityListener() {
@@ -83,7 +89,10 @@ public class PopupButtonUI extends UI {
 						String msg = "Popup closed";
 						if (event.getPopupButton().isPopupVisible()) {
 							msg = "Popup opened";
-						}
+                            b.setClickShortcut(ShortcutAction.KeyCode.ENTER);
+						} else {
+                            b.removeClickShortcut();
+                        }
 						Notification.show(msg);
 					}
 				});
@@ -91,6 +100,8 @@ public class PopupButtonUI extends UI {
 
 		PopupButton comboBoxButton = new PopupButton("ComboBox in Popup");
 		ComboBox cb = new ComboBox();
+        cb.addItem("Item 1");
+        cb.addItem("Item 2");
 		cb.setInputPrompt("ComboBox");
 		comboBoxButton.setContent(cb);
 		horizontalLayout.addComponent(comboBoxButton);
@@ -109,7 +120,9 @@ public class PopupButtonUI extends UI {
 					public void buttonClick(ClickEvent event) {
 						Window w = new Window();
 						w.center();
-						w.setContent(createPopupButton());
+                        PopupButton popupButton = new PopupButton();
+                        popupButton.setContent(new PopupDateField());
+						w.setContent(popupButton);
 						addWindow(w);
 					}
 				});
@@ -120,10 +133,29 @@ public class PopupButtonUI extends UI {
 		Alignment[] aligns = new Alignment[] { Alignment.TOP_RIGHT,
 				Alignment.BOTTOM_LEFT, Alignment.BOTTOM_RIGHT };
 		for (Alignment align : aligns) {
-			PopupButton b = createPopupButton();
-			mainLayout.addComponent(b);
-			mainLayout.setComponentAlignment(b, align);
+			PopupButton b2 = createPopupButton();
+			mainLayout.addComponent(b2);
+			mainLayout.setComponentAlignment(b2, align);
 		}
+
+        final Button myButton = new Button("", new ClickListener() {
+            @Override
+            public void buttonClick(ClickEvent event) {
+                Notification.show("hello there :)");
+            }
+        });
+        PopupView popupView = new PopupView("Hello", myButton);
+        popupView.addPopupVisibilityListener(new PopupView.PopupVisibilityListener() {
+            @Override
+            public void popupVisibilityChange(PopupView.PopupVisibilityEvent event) {
+                if (event.isPopupVisible()) {
+                    myButton.setClickShortcut(ShortcutAction.KeyCode.ENTER);
+                } else {
+                    myButton.removeClickShortcut();
+                }
+            }
+        });
+        horizontalLayout.addComponent(popupView);
 	}
 
 	private PopupButton createPopupButton() {

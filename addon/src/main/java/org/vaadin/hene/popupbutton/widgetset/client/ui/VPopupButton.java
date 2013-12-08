@@ -5,6 +5,8 @@ import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.NativeEvent;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.HasWidgets;
@@ -13,10 +15,7 @@ import com.vaadin.client.ComponentConnector;
 import com.vaadin.client.Util;
 import com.vaadin.client.VCaptionWrapper;
 import com.vaadin.client.debug.internal.VDebugWindow;
-import com.vaadin.client.ui.VButton;
-import com.vaadin.client.ui.VOverlay;
-import com.vaadin.client.ui.VPopupView;
-import com.vaadin.client.ui.VRichTextArea;
+import com.vaadin.client.ui.*;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -61,66 +60,66 @@ public class VPopupButton extends VButton {
 	void showPopup() {
 		Scheduler.get().scheduleDeferred(new ScheduledCommand() {
 
-			public void execute() {
-				if (position.equals("auto")) {
-					int extra = 20;
+            public void execute() {
+                if (position.equals("auto")) {
+                    int extra = 20;
 
-					int left = getPopupPositionWidget().getAbsoluteLeft();
-					int top = getPopupPositionWidget().getAbsoluteTop()
-							+ getPopupPositionWidget().getOffsetHeight();
-					int browserWindowWidth = Window.getClientWidth()
-							+ Window.getScrollLeft();
-					int browserWindowHeight = Window.getClientHeight()
-							+ Window.getScrollTop();
-					if (left + popup.getOffsetWidth() > browserWindowWidth
-							- extra) {
-						left = getPopupPositionWidget().getAbsoluteLeft()
-								- (popup.getOffsetWidth() - getPopupPositionWidget()
-										.getOffsetWidth());
-					}
-					if (top + popup.getOffsetHeight() > browserWindowHeight
-							- extra) {
-						top = getPopupPositionWidget().getAbsoluteTop()
-								- popup.getOffsetHeight() - 2;
-					}
-					left = left + xOffset;
-					if (left < 0) {
-						left = 0;
-					}
-					popup.setPopupPosition(left, top + yOffset);
-					popup.setVisible(true);
-				} else if (position.equals("fixed")) {
-					int extra = 20;
+                    int left = getPopupPositionWidget().getAbsoluteLeft();
+                    int top = getPopupPositionWidget().getAbsoluteTop()
+                            + getPopupPositionWidget().getOffsetHeight();
+                    int browserWindowWidth = Window.getClientWidth()
+                            + Window.getScrollLeft();
+                    int browserWindowHeight = Window.getClientHeight()
+                            + Window.getScrollTop();
+                    if (left + popup.getOffsetWidth() > browserWindowWidth
+                            - extra) {
+                        left = getPopupPositionWidget().getAbsoluteLeft()
+                                - (popup.getOffsetWidth() - getPopupPositionWidget()
+                                .getOffsetWidth());
+                    }
+                    if (top + popup.getOffsetHeight() > browserWindowHeight
+                            - extra) {
+                        top = getPopupPositionWidget().getAbsoluteTop()
+                                - popup.getOffsetHeight() - 2;
+                    }
+                    left = left + xOffset;
+                    if (left < 0) {
+                        left = 0;
+                    }
+                    popup.setPopupPosition(left, top + yOffset);
+                    popup.setVisible(true);
+                } else if (position.equals("fixed")) {
+                    int extra = 20;
 
-					int left = getPopupPositionWidget().getAbsoluteLeft();
-					int top = getPopupPositionWidget().getAbsoluteTop()
-							+ getPopupPositionWidget().getOffsetHeight()
-							- Window.getScrollTop();
+                    int left = getPopupPositionWidget().getAbsoluteLeft();
+                    int top = getPopupPositionWidget().getAbsoluteTop()
+                            + getPopupPositionWidget().getOffsetHeight()
+                            - Window.getScrollTop();
 
-					int browserWindowWidth = Window.getClientWidth()
-							+ Window.getScrollLeft();
-					int clientHeight = Window.getClientHeight();
-					if (left + popup.getOffsetWidth() > browserWindowWidth
-							- extra) {
-						left = getPopupPositionWidget().getAbsoluteLeft()
-								- (popup.getOffsetWidth() - getPopupPositionWidget()
-										.getOffsetWidth());
-					}
-					if (top + popup.getOffsetHeight() > clientHeight - extra) {
-						top = (getPopupPositionWidget().getAbsoluteTop() - Window
-								.getScrollTop()) - popup.getOffsetHeight() - 2;
-					}
-					left = left + xOffset;
-					if (left < 0) {
-						left = 0;
-					}
-					popup.setPopupPosition(left, top + yOffset);
-					popup.addStyleName("fixed");
-					popup.setShadowStyle("fixed");
-					popup.setVisible(true);
-				}
-			}
-		});
+                    int browserWindowWidth = Window.getClientWidth()
+                            + Window.getScrollLeft();
+                    int clientHeight = Window.getClientHeight();
+                    if (left + popup.getOffsetWidth() > browserWindowWidth
+                            - extra) {
+                        left = getPopupPositionWidget().getAbsoluteLeft()
+                                - (popup.getOffsetWidth() - getPopupPositionWidget()
+                                .getOffsetWidth());
+                    }
+                    if (top + popup.getOffsetHeight() > clientHeight - extra) {
+                        top = (getPopupPositionWidget().getAbsoluteTop() - Window
+                                .getScrollTop()) - popup.getOffsetHeight() - 2;
+                    }
+                    left = left + xOffset;
+                    if (left < 0) {
+                        left = 0;
+                    }
+                    popup.setPopupPosition(left, top + yOffset);
+                    popup.addStyleName("fixed");
+                    popup.setShadowStyle("fixed");
+                    popup.setVisible(true);
+                }
+            }
+        });
 	}
 
 	void hidePopup() {
@@ -139,12 +138,20 @@ public class VPopupButton extends VButton {
         popup.syncChildren();
     }
 
+    public void onKeyDownOnVisiblePopup(NativeEvent nativeEvent, ComponentConnector target) {
+        if (popup.shortcutActionHandler != null) {
+            popup.shortcutActionHandler.handleKeyboardEvent(Event.as(nativeEvent), target);
+        }
+    }
+
     class LayoutPopup extends VOverlay {
 
 		public static final String CLASSNAME = VPopupButton.CLASSNAME
 				+ "-popup";
 
 		private boolean hiding = false;
+
+        private ShortcutActionHandler shortcutActionHandler;
 
 		public LayoutPopup() {
 			super(false, false, true);
@@ -188,12 +195,27 @@ public class VPopupButton extends VButton {
 		public void hide(boolean autoClosed) {
 			hiding = true;
 			syncChildren();
+            shortcutActionHandler = null;
 			super.hide(autoClosed);
 		}
 
 		@Override
 		public void show() {
 			hiding = false;
+
+            //  ** Copied from PopupView **
+            // Find the shortcut action handler that should handle keyboard
+            // events from the popup. The events do not propagate automatically
+            // because the popup is directly attached to the RootPanel.
+            Widget widget = VPopupButton.this;
+            while (shortcutActionHandler == null && widget != null) {
+                if (widget instanceof ShortcutActionHandler.ShortcutActionHandlerOwner) {
+                    shortcutActionHandler = ((ShortcutActionHandler.ShortcutActionHandlerOwner) widget)
+                            .getShortcutActionHandler();
+                }
+                widget = widget.getParent();
+            }
+
 			super.show();
 		}
 
@@ -257,10 +279,18 @@ public class VPopupButton extends VButton {
 	}
 
     private boolean isAlsoInOverlay(Element element) {
-        Element overlayHolder = popup.getElement().getParentElement();
-        if (overlayHolder != null) {
-            return overlayHolder.isOrHasChild(element);
+        boolean isOverlay = popup.getOverlayContainer().isOrHasChild(element);
+
+        if (isOverlay) {
+            while (element != null) {
+                if (element.getClassName().contains("v-window")) {
+                    return false;
+                }
+                element = element.getParentElement();
+            }
+            return true;
         }
+
         return false;
     }
 

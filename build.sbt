@@ -8,7 +8,9 @@ organization in ThisBuild := "org.vaadin.hene"
 
 crossPaths in ThisBuild := false
 
-autoScalaLibrary := false
+autoScalaLibrary in ThisBuild := false
+
+javacOptions in ThisBuild ++= Seq("-source", "1.6", "-target", "1.6")
 
 lazy val root = project.in(file(".")).aggregate(addon, demo)
 

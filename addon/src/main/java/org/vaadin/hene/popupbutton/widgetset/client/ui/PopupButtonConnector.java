@@ -27,8 +27,6 @@ public class PopupButtonConnector extends ButtonConnector implements
 	private PopupButtonServerRpc rpc = RpcProxy.create(
 			PopupButtonServerRpc.class, this);
 
-	//private boolean popupVisible = false;
-
 	private HandlerRegistration nativePreviewHandler;
 
 	public PopupButtonConnector() {
@@ -169,6 +167,11 @@ public class PopupButtonConnector extends ButtonConnector implements
                     getWidget().addToActiveChildren(target);
                 }
 				break;
+            case Event.ONKEYDOWN:
+                if (getState().popupVisible) {
+                    getWidget().onKeyDownOnVisiblePopup(event.getNativeEvent(), this);
+                }
+                break;
 			default:
 				break;
 			}
