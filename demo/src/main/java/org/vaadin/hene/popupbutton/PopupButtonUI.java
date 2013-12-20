@@ -1,24 +1,23 @@
 package org.vaadin.hene.popupbutton;
 
+import com.vaadin.annotations.Title;
 import com.vaadin.data.Property;
 import com.vaadin.event.ShortcutAction;
-import com.vaadin.ui.*;
-import org.vaadin.hene.popupbutton.PopupButton.PopupVisibilityEvent;
-import org.vaadin.hene.popupbutton.PopupButton.PopupVisibilityListener;
-
 import com.vaadin.server.ThemeResource;
 import com.vaadin.server.VaadinRequest;
+import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.themes.Reindeer;
+import org.vaadin.hene.popupbutton.PopupButton.PopupVisibilityEvent;
+import org.vaadin.hene.popupbutton.PopupButton.PopupVisibilityListener;
 
 @SuppressWarnings("serial")
+@Title("PopupButton Application")
 public class PopupButtonUI extends UI {
 
 	@Override
 	protected void init(VaadinRequest request) {
-		getPage().setTitle("PopupButton Application");
-
 		GridLayout mainLayout = new GridLayout(2, 2);
 		mainLayout.setStyleName("main");
 		mainLayout.setSizeFull();
@@ -121,7 +120,12 @@ public class PopupButtonUI extends UI {
 						Window w = new Window();
 						w.center();
                         PopupButton popupButton = new PopupButton();
-                        popupButton.setContent(new PopupDateField());
+                        VerticalLayout l = new VerticalLayout();
+                        l.setMargin(true);
+                        l.setSpacing(true);
+                        l.addComponent(new PopupDateField());
+                        l.addComponent(createPopupButton());
+                        popupButton.setContent(l);
 						w.setContent(popupButton);
 						addWindow(w);
 					}
@@ -137,25 +141,6 @@ public class PopupButtonUI extends UI {
 			mainLayout.addComponent(b2);
 			mainLayout.setComponentAlignment(b2, align);
 		}
-
-        final Button myButton = new Button("", new ClickListener() {
-            @Override
-            public void buttonClick(ClickEvent event) {
-                Notification.show("hello there :)");
-            }
-        });
-        PopupView popupView = new PopupView("Hello", myButton);
-        popupView.addPopupVisibilityListener(new PopupView.PopupVisibilityListener() {
-            @Override
-            public void popupVisibilityChange(PopupView.PopupVisibilityEvent event) {
-                if (event.isPopupVisible()) {
-                    myButton.setClickShortcut(ShortcutAction.KeyCode.ENTER);
-                } else {
-                    myButton.removeClickShortcut();
-                }
-            }
-        });
-        horizontalLayout.addComponent(popupView);
 	}
 
 	private PopupButton createPopupButton() {

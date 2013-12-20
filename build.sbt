@@ -2,7 +2,7 @@ import org.vaadin.sbt.VaadinPlugin._
 
 name := "PopupButton"
 
-version in ThisBuild := "2.3-SNAPSHOT"
+version in ThisBuild := "2.3.0"
 
 organization in ThisBuild := "org.vaadin.hene"
 
@@ -16,7 +16,11 @@ lazy val root = project.in(file(".")).aggregate(addon, demo)
 
 lazy val addon = project.settings(vaadinAddOnSettings :_*).settings(
   name := "PopupButton",
-  libraryDependencies := Dependencies.addonDeps
+  libraryDependencies := Dependencies.addonDeps,
+  // Javadoc generation causes problems so disabling it for now
+  mappings in packageVaadinDirectoryZip <<= (packageBin in Compile, packageSrc in Compile) map {
+    (bin, src) => Seq((bin, bin.name), (src, src.name))
+  }
 )
 
 lazy val demo = project.settings(vaadinWebSettings :_*).settings(

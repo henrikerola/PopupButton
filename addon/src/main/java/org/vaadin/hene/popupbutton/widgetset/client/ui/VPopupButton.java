@@ -275,10 +275,6 @@ public class VPopupButton extends VButton {
 	}
 
 	public boolean isOrHasChildOfPopup(Element element) {
-		return popup.getElement().isOrHasChild(element) || isAlsoInOverlay(element);
-	}
-
-    private boolean isAlsoInOverlay(Element element) {
         boolean isOverlay = popup.getOverlayContainer().isOrHasChild(element);
 
         if (isOverlay) {
