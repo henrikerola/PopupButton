@@ -22,165 +22,165 @@ import java.util.List;
 @SuppressWarnings("serial")
 @Connect(PopupButton.class)
 public class PopupButtonConnector extends ButtonConnector implements
-		HasComponentsConnector, ConnectorHierarchyChangeHandler, NativePreviewHandler {
+        HasComponentsConnector, ConnectorHierarchyChangeHandler, NativePreviewHandler {
 
-	private PopupButtonServerRpc rpc = RpcProxy.create(
-			PopupButtonServerRpc.class, this);
+    private PopupButtonServerRpc rpc = RpcProxy.create(
+            PopupButtonServerRpc.class, this);
 
-	private HandlerRegistration nativePreviewHandler;
+    private HandlerRegistration nativePreviewHandler;
 
-	public PopupButtonConnector() {
-		addConnectorHierarchyChangeHandler(this);
-	}
+    public PopupButtonConnector() {
+        addConnectorHierarchyChangeHandler(this);
+    }
 
-	@Override
-	public void init() {
-		super.init();
-		nativePreviewHandler = Event.addNativePreviewHandler(this);
-	}
+    @Override
+    public void init() {
+        super.init();
+        nativePreviewHandler = Event.addNativePreviewHandler(this);
+    }
 
-	@Override
-	public void onUnregister() {
-		super.onUnregister();
-		if (nativePreviewHandler != null) {
-			nativePreviewHandler.removeHandler();
-			nativePreviewHandler = null;
-		}
-	}
+    @Override
+    public void onUnregister() {
+        super.onUnregister();
+        if (nativePreviewHandler != null) {
+            nativePreviewHandler.removeHandler();
+            nativePreviewHandler = null;
+        }
+    }
 
-	@Override
-	public void onClick(ClickEvent event) {
-		if (!getState().popupVisible && isEnabled()) {
-			rpc.setPopupVisible(true);
-		}
-		super.onClick(event);
-	}
+    @Override
+    public void onClick(ClickEvent event) {
+        if (!getState().popupVisible && isEnabled()) {
+            rpc.setPopupVisible(true);
+        }
+        super.onClick(event);
+    }
 
-	@Override
-	public void onStateChanged(StateChangeEvent stateChangeEvent) {
-		super.onStateChanged(stateChangeEvent);
-		getWidget().addStyleName(VPopupButton.CLASSNAME);
-	}
+    @Override
+    public void onStateChanged(StateChangeEvent stateChangeEvent) {
+        super.onStateChanged(stateChangeEvent);
+        getWidget().addStyleName(VPopupButton.CLASSNAME);
+    }
 
-	public void onConnectorHierarchyChange(ConnectorHierarchyChangeEvent event) {
-		if (getChildComponents().isEmpty()) {
+    public void onConnectorHierarchyChange(ConnectorHierarchyChangeEvent event) {
+        if (getChildComponents().isEmpty()) {
             getWidget().hidePopup();
-			getWidget().popup.setWidget(null);
-		} else {
-			getWidget().popup.setVisible(false);
-			getWidget().popup.show();
-			getWidget().popup.setWidget(childrenComponentConnector.getWidget());
+            getWidget().popup.setWidget(null);
+        } else {
+            getWidget().popup.setVisible(false);
+            getWidget().popup.show();
+            getWidget().popup.setWidget(childrenComponentConnector.getWidget());
             getWidget().setPopupStyleNames(getState().styles);
             getWidget().showPopup();
-		}
-	}
+        }
+    }
 
-	@Override
-	protected VPopupButton createWidget() {
-		return GWT.create(VPopupButton.class);
-	}
+    @Override
+    protected VPopupButton createWidget() {
+        return GWT.create(VPopupButton.class);
+    }
 
-	@Override
-	public VPopupButton getWidget() {
-		return (VPopupButton) super.getWidget();
-	}
+    @Override
+    public VPopupButton getWidget() {
+        return (VPopupButton) super.getWidget();
+    }
 
-	@Override
-	public PopupButtonState getState() {
-		return (PopupButtonState) super.getState();
-	}
+    @Override
+    public PopupButtonState getState() {
+        return (PopupButtonState) super.getState();
+    }
 
-	public void updateCaption(ComponentConnector component) {
-		if (VCaption.isNeeded(component.getState())) {
-			if (getWidget().popup.getCaptionWrapper() != null) {
-				getWidget().popup.getCaptionWrapper().updateCaption();
-			} else {
-				VCaptionWrapper captionWrapper = new VCaptionWrapper(component,
-						getConnection());
-				getWidget().popup.setWidget(captionWrapper);
-				captionWrapper.updateCaption();
-			}
-		} else {
-			if (getWidget().popup.getCaptionWrapper() != null) {
-				getWidget().popup.setWidget((Widget) getWidget().popup
-						.getCaptionWrapper().getWrappedConnector().getWidget());
-			}
-		}
-	}
+    public void updateCaption(ComponentConnector component) {
+        if (VCaption.isNeeded(component.getState())) {
+            if (getWidget().popup.getCaptionWrapper() != null) {
+                getWidget().popup.getCaptionWrapper().updateCaption();
+            } else {
+                VCaptionWrapper captionWrapper = new VCaptionWrapper(component,
+                        getConnection());
+                getWidget().popup.setWidget(captionWrapper);
+                captionWrapper.updateCaption();
+            }
+        } else {
+            if (getWidget().popup.getCaptionWrapper() != null) {
+                getWidget().popup.setWidget((Widget) getWidget().popup
+                        .getCaptionWrapper().getWrappedConnector().getWidget());
+            }
+        }
+    }
 
-	private ComponentConnector childrenComponentConnector;
+    private ComponentConnector childrenComponentConnector;
 
-	public List<ComponentConnector> getChildComponents() {
-		if (childrenComponentConnector == null) {
-			return Collections.<ComponentConnector> emptyList();
-		}
-		return Collections.singletonList(childrenComponentConnector);
-	}
+    public List<ComponentConnector> getChildComponents() {
+        if (childrenComponentConnector == null) {
+            return Collections.<ComponentConnector> emptyList();
+        }
+        return Collections.singletonList(childrenComponentConnector);
+    }
 
-	public void setChildComponents(List<ComponentConnector> children) {
-		if (children.size() > 1) {
-			throw new IllegalArgumentException("");
-		}
+    public void setChildComponents(List<ComponentConnector> children) {
+        if (children.size() > 1) {
+            throw new IllegalArgumentException("");
+        }
 
-		if (!children.isEmpty()) {
-			childrenComponentConnector = children.get(0);
-		} else {
-			childrenComponentConnector = null;
-		}
-	}
+        if (!children.isEmpty()) {
+            childrenComponentConnector = children.get(0);
+        } else {
+            childrenComponentConnector = null;
+        }
+    }
 
-	public HandlerRegistration addConnectorHierarchyChangeHandler(
-			ConnectorHierarchyChangeHandler handler) {
-		return ensureHandlerManager().addHandler(
-				ConnectorHierarchyChangeEvent.TYPE, handler);
-	}
+    public HandlerRegistration addConnectorHierarchyChangeHandler(
+            ConnectorHierarchyChangeHandler handler) {
+        return ensureHandlerManager().addHandler(
+                ConnectorHierarchyChangeEvent.TYPE, handler);
+    }
 
-	public void onPreviewNativeEvent(NativePreviewEvent event) {
-		if (isEnabled()) {
-			Element target = Element
-					.as(event.getNativeEvent().getEventTarget());
-			switch (event.getTypeInt()) {
-			case Event.ONCLICK:
-				if (getWidget().isOrHasChildOfButton(target)) {
-					if (getState().popupVisible) {
+    public void onPreviewNativeEvent(NativePreviewEvent event) {
+        if (isEnabled()) {
+            Element target = Element
+                    .as(event.getNativeEvent().getEventTarget());
+            switch (event.getTypeInt()) {
+            case Event.ONCLICK:
+                if (getWidget().isOrHasChildOfButton(target)) {
+                    if (getState().popupVisible) {
                         getWidget().sync();
-						rpc.setPopupVisible(false);
-					}
-				}
-				break;
-			case Event.ONMOUSEDOWN:
-				if (!getWidget().isOrHasChildOfPopup(target)
-						&& !getWidget().isOrHasChildOfConsole(target)
-						&& !getWidget().isOrHasChildOfButton(target)) {
-					if (getState().popupVisible) {
+                        rpc.setPopupVisible(false);
+                    }
+                }
+                break;
+            case Event.ONMOUSEDOWN:
+                if (!getWidget().isOrHasChildOfPopup(target)
+                        && !getWidget().isOrHasChildOfConsole(target)
+                        && !getWidget().isOrHasChildOfButton(target)) {
+                    if (getState().popupVisible) {
                         getWidget().sync();
-						rpc.setPopupVisible(false);
-					}
-				}
-				break;
-			case Event.ONKEYPRESS:
-				if (getWidget().isOrHasChildOfPopup(target)) {
+                        rpc.setPopupVisible(false);
+                    }
+                }
+                break;
+            case Event.ONKEYPRESS:
+                if (getWidget().isOrHasChildOfPopup(target)) {
                     // Catch children that use keyboard, so we can unfocus
                     // them
                     // when
                     // hiding
                     getWidget().addToActiveChildren(target);
                 }
-				break;
+                break;
             case Event.ONKEYDOWN:
                 if (getState().popupVisible) {
                     getWidget().onKeyDownOnVisiblePopup(event.getNativeEvent(), this);
                 }
                 break;
-			default:
-				break;
-			}
-		}
-	}
+            default:
+                break;
+            }
+        }
+    }
 
-	@Override
-	public boolean delegateCaptionHandling() {
-		return false;
-	}
+    @Override
+    public boolean delegateCaptionHandling() {
+        return false;
+    }
 
 }
