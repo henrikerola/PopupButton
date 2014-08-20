@@ -1,6 +1,7 @@
 package org.vaadin.hene.popupbutton.widgetset.client.ui;
 
 import com.vaadin.shared.Connector;
+import com.vaadin.shared.annotations.DelegateToWidget;
 import com.vaadin.shared.ui.button.ButtonState;
 
 public class PopupButtonState extends ButtonState {
@@ -11,4 +12,6 @@ public class PopupButtonState extends ButtonState {
 	public int yOffset = 0;
 	public boolean popupFixedPosition;
 
+    @DelegateToWidget
+    public int direction = 0;
 }

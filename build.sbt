@@ -2,7 +2,7 @@ import org.vaadin.sbt.VaadinPlugin._
 
 name := "PopupButton"
 
-version in ThisBuild := "2.3.0"
+version in ThisBuild := "2.4-SNAPSHOT"
 
 organization in ThisBuild := "org.vaadin.hene"
 

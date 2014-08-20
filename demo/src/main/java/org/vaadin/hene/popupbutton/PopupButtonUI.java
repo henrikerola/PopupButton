@@ -12,9 +12,14 @@ import com.vaadin.ui.themes.Reindeer;
 import org.vaadin.hene.popupbutton.PopupButton.PopupVisibilityEvent;
 import org.vaadin.hene.popupbutton.PopupButton.PopupVisibilityListener;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @SuppressWarnings("serial")
 @Title("PopupButton Application")
 public class PopupButtonUI extends UI {
+
+    private List<PopupButton> popupButtons = new ArrayList<PopupButton>();
 
 	@Override
 	protected void init(VaadinRequest request) {
@@ -26,9 +31,11 @@ public class PopupButtonUI extends UI {
 
 		HorizontalLayout horizontalLayout = new HorizontalLayout();
 		mainLayout.addComponent(horizontalLayout);
+        horizontalLayout.addComponent(createDirectionSelector());
 		horizontalLayout.addComponent(createPopupButton());
 
 		PopupButton textCaptionButton = new PopupButton("Caption only");
+        popupButtons.add(textCaptionButton);
         textCaptionButton.setStyleName("style1");
         textCaptionButton.addStyleName("style2");
 		final TextArea textArea = new TextArea("Multi-line TextField");
@@ -52,6 +59,7 @@ public class PopupButtonUI extends UI {
 		horizontalLayout.addComponent(textCaptionButton);
 
 		PopupButton iconButton = new PopupButton();
+        popupButtons.add(iconButton);
 		iconButton.setIcon(new ThemeResource("../runo/icons/16/users.png"));
 		iconButton.setStyleName("style1 style2");
 		horizontalLayout.addComponent(iconButton);
@@ -73,10 +81,12 @@ public class PopupButtonUI extends UI {
 		userLayout.addComponent(removeUser);
 		userLayout.setComponentAlignment(removeUser, Alignment.MIDDLE_LEFT);
 
-		PopupButton listenerButton = new PopupButton();
+		final PopupButton listenerButton = new PopupButton();
+        popupButtons.add(listenerButton);
         final Button b = new Button("Click me!", new ClickListener() {
             @Override
             public void buttonClick(ClickEvent event) {
+                listenerButton.setPopupVisible(false);
                 Notification.show("Button clicked!");
             }
         });
@@ -98,6 +108,7 @@ public class PopupButtonUI extends UI {
 		horizontalLayout.addComponent(listenerButton);
 
 		PopupButton comboBoxButton = new PopupButton("ComboBox in Popup");
+        popupButtons.add(comboBoxButton);
 		ComboBox cb = new ComboBox();
         cb.addItem("Item 1");
         cb.addItem("Item 2");
@@ -106,6 +117,8 @@ public class PopupButtonUI extends UI {
 		horizontalLayout.addComponent(comboBoxButton);
 
 		PopupButton tableButton = new PopupButton("Table in Popup");
+        popupButtons.add(tableButton);
+        tableButton.setDirection(Alignment.BOTTOM_CENTER);
 		Table table = new Table();
 		table.addContainerProperty("property1", String.class, "-");
 		table.addContainerProperty("property2", String.class, "-");
@@ -120,6 +133,7 @@ public class PopupButtonUI extends UI {
 						Window w = new Window();
 						w.center();
                         PopupButton popupButton = new PopupButton();
+                        popupButtons.add(popupButton);
                         VerticalLayout l = new VerticalLayout();
                         l.setMargin(true);
                         l.setSpacing(true);
@@ -132,7 +146,9 @@ public class PopupButtonUI extends UI {
 				});
 		horizontalLayout.addComponent(openSubwindowButton);
 
-        horizontalLayout.addComponent(new PopupButton("No content"));
+        final PopupButton noContentPopupButton = new PopupButton("No content");
+        popupButtons.add(noContentPopupButton);
+        horizontalLayout.addComponent(noContentPopupButton);
 
 		Alignment[] aligns = new Alignment[] { Alignment.TOP_RIGHT,
 				Alignment.BOTTOM_LEFT, Alignment.BOTTOM_RIGHT };
@@ -145,6 +161,7 @@ public class PopupButtonUI extends UI {
 
 	private PopupButton createPopupButton() {
 		PopupButton popupButton = new PopupButton("Add");
+        popupButtons.add(popupButton);
 		popupButton.setIcon(new ThemeResource(
 				"../runo/icons/16/document-add.png"));
 
@@ -171,4 +188,24 @@ public class PopupButtonUI extends UI {
 		b.setStyleName(Reindeer.BUTTON_LINK);
 		return b;
 	}
+
+    private NativeSelect createDirectionSelector() {
+        final NativeSelect directionSelector = new NativeSelect();
+        directionSelector.setNullSelectionAllowed(false);
+        directionSelector.addItem(Alignment.BOTTOM_LEFT);
+        directionSelector.setItemCaption(Alignment.BOTTOM_LEFT, "BOTTOM_LEFT");
+        directionSelector.addItem(Alignment.BOTTOM_CENTER);
+        directionSelector.setItemCaption(Alignment.BOTTOM_CENTER, "BOTTOM_CENTER");
+        directionSelector.setValue(Alignment.BOTTOM_LEFT);
+        directionSelector.addValueChangeListener(new Property.ValueChangeListener() {
+            @Override
+            public void valueChange(Property.ValueChangeEvent event) {
+                for (PopupButton popupButton : popupButtons) {
+                    popupButton.setDirection((Alignment) directionSelector.getValue());
+                }
+            }
+        });
+
+        return directionSelector;
+    }
 }

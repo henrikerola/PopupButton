@@ -16,6 +16,7 @@ import com.vaadin.client.Util;
 import com.vaadin.client.VCaptionWrapper;
 import com.vaadin.client.debug.internal.VDebugWindow;
 import com.vaadin.client.ui.*;
+import com.vaadin.shared.ui.AlignmentInfo;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -42,6 +43,8 @@ public class VPopupButton extends VButton {
 
     private final Set<Element> activeChildren = new HashSet<Element>();
 
+    private AlignmentInfo direction;
+
 	public VPopupButton() {
 		super();
 		DivElement e = Document.get().createDivElement();
@@ -65,6 +68,9 @@ public class VPopupButton extends VButton {
                     int extra = 20;
 
                     int left = getPopupPositionWidget().getAbsoluteLeft();
+                    if (direction.isHorizontalCenter()) {
+                        left -= (popup.getOffsetWidth() - getPopupPositionWidget().getOffsetWidth()) / 2;
+                    }
                     int top = getPopupPositionWidget().getAbsoluteTop()
                             + getPopupPositionWidget().getOffsetHeight();
                     int browserWindowWidth = Window.getClientWidth()
@@ -142,6 +148,11 @@ public class VPopupButton extends VButton {
         if (popup.shortcutActionHandler != null) {
             popup.shortcutActionHandler.handleKeyboardEvent(Event.as(nativeEvent), target);
         }
+    }
+
+    // Called by @DelegateToWidget
+    public void setDirection(int direction) {
+        this.direction = new AlignmentInfo(direction);
     }
 
     class LayoutPopup extends VOverlay {

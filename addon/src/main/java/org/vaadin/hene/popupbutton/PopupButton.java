@@ -5,14 +5,10 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.Iterator;
 
+import com.vaadin.ui.*;
 import org.vaadin.hene.popupbutton.widgetset.client.ui.PopupButtonServerRpc;
 import org.vaadin.hene.popupbutton.widgetset.client.ui.PopupButtonState;
 
-import com.vaadin.ui.AbstractSingleComponentContainer;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.ComponentContainer;
-import com.vaadin.ui.SingleComponentContainer;
 import com.vaadin.util.ReflectTools;
 
 /**
@@ -38,6 +34,9 @@ public class PopupButton extends Button implements SingleComponentContainer {
 
 	private Component component;
 
+    // This is here for getter because in the state we store int bitmask only
+    private Alignment direction;
+
 	// These can be used by extending PopupButton.
 	// It's possible that these are removed in future versions or functionality
 	// is changed.
@@ -53,13 +52,15 @@ public class PopupButton extends Button implements SingleComponentContainer {
 		}
 	};
 
-	public PopupButton() {
-		registerRpc(rpc);
+    public PopupButton() {
+        registerRpc(rpc);
+        setDirection(Alignment.BOTTOM_RIGHT);
 	}
 
 	public PopupButton(String caption) {
 		super(caption);
 		registerRpc(rpc);
+        setDirection(Alignment.BOTTOM_RIGHT);
 	}
 
 	@Override
@@ -116,7 +117,7 @@ public class PopupButton extends Button implements SingleComponentContainer {
 	 * 
 	 * @param component
 	 *            the component to be displayed in the popup.
-	 * @deprecated Use {@link setContent(Component content)} instead
+	 * @deprecated Use {@link #setContent(com.vaadin.ui.Component)}  instead
 	 */
 	@Deprecated
 	public void setComponent(Component component) {
@@ -133,6 +134,28 @@ public class PopupButton extends Button implements SingleComponentContainer {
         component = content;
 		markAsDirty();
 	}
+
+    /**
+     * Gets popup's opening direction.
+     */
+    public Alignment getDirection() {
+        return direction;
+    }
+
+    /**
+     * Sets opening direction for the popup. At the moment only support values are
+     * {@link com.vaadin.ui.Alignment#BOTTOM_LEFT} and {@link com.vaadin.ui.Alignment#BOTTOM_CENTER}.
+     *
+     * Default is {@link com.vaadin.ui.Alignment#BOTTOM_LEFT}.
+     */
+    public void setDirection(final Alignment direction) {
+        if (direction == null) {
+            throw new IllegalArgumentException("direction cannot be null");
+        }
+
+        this.direction = direction;
+        getState().direction = direction.getBitMask();
+    }
 
 	/**
 	 * Add a listener that is called whenever the visibility of the popup is
@@ -205,14 +228,14 @@ public class PopupButton extends Button implements SingleComponentContainer {
 	 */
 	public interface PopupVisibilityListener extends Serializable {
 		/**
-		 * Pass to {@link PopupButton#PopupVisibilityEvent} to start listening
+		 * Pass to {@link PopupButton.PopupVisibilityEvent} to start listening
 		 * for popup visibility changes.
 		 * 
 		 * @param event
 		 *            the event
 		 * 
-		 * @see {@link PopupVisibilityEvent}
-		 * @see {@link PopupButton#addPopupVisibilityListener(PopupVisibilityListener)}
+		 * @see PopupVisibilityEvent
+		 * @see PopupButton#addPopupVisibilityListener(PopupVisibilityListener)
 		 */
 		public void popupVisibilityChange(PopupVisibilityEvent event);
 	}
