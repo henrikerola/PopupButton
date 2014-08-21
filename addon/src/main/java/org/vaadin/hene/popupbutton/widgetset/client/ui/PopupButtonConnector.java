@@ -50,7 +50,7 @@ public class PopupButtonConnector extends ButtonConnector implements
 
     @Override
     public void onClick(ClickEvent event) {
-        if (!getState().popupVisible && isEnabled()) {
+        if (!getState().popupVisible && isEnabled() && getState().buttonClickTogglesPopupVisibility) {
             rpc.setPopupVisible(true);
         }
         super.onClick(event);
@@ -142,7 +142,7 @@ public class PopupButtonConnector extends ButtonConnector implements
             switch (event.getTypeInt()) {
             case Event.ONCLICK:
                 if (getWidget().isOrHasChildOfButton(target)) {
-                    if (getState().popupVisible) {
+                    if (getState().popupVisible && getState().buttonClickTogglesPopupVisibility) {
                         getWidget().sync();
                         rpc.setPopupVisible(false);
                     }

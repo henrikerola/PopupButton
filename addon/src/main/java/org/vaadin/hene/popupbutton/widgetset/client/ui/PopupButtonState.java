@@ -14,4 +14,5 @@ public class PopupButtonState extends ButtonState {
 
     @DelegateToWidget
     public int direction = 0;
+    public boolean buttonClickTogglesPopupVisibility = true;
 }

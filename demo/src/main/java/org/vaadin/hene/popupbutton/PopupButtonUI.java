@@ -106,6 +106,14 @@ public class PopupButtonUI extends UI {
                     }
                 });
         horizontalLayout.addComponent(listenerButton);
+        listenerButton.addClickListener(new ClickListener() {
+            @Override
+            public void buttonClick(ClickEvent event) {
+                if (!listenerButton.isButtonClickTogglesPopupVisibility()) {
+                    listenerButton.setPopupVisible(!listenerButton.isPopupVisible());
+                }
+            }
+        });
 
         PopupButton comboBoxButton = new PopupButton("ComboBox in Popup");
         popupButtons.add(comboBoxButton);
@@ -189,7 +197,9 @@ public class PopupButtonUI extends UI {
         return b;
     }
 
-    private NativeSelect createDirectionSelector() {
+    private VerticalLayout createDirectionSelector() {
+        VerticalLayout layout = new VerticalLayout();
+
         final NativeSelect directionSelector = new NativeSelect();
         directionSelector.setNullSelectionAllowed(false);
         directionSelector.addItem(Alignment.BOTTOM_LEFT);
@@ -205,7 +215,19 @@ public class PopupButtonUI extends UI {
                 }
             }
         });
+        layout.addComponent(directionSelector);
 
-        return directionSelector;
+        final CheckBox buttonClickTogglesPopupVisibility = new CheckBox("Button click toggles popup visibility", true);
+        buttonClickTogglesPopupVisibility.addValueChangeListener(new Property.ValueChangeListener() {
+            @Override
+            public void valueChange(Property.ValueChangeEvent event) {
+                for (PopupButton popupButton : popupButtons) {
+                    popupButton.setButtonClickTogglesPopupVisibility(buttonClickTogglesPopupVisibility.getValue());
+                }
+            }
+        });
+        layout.addComponent(buttonClickTogglesPopupVisibility);
+
+        return layout;
     }
 }

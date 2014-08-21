@@ -158,6 +158,23 @@ public class PopupButton extends Button implements SingleComponentContainer {
     }
 
     /**
+     * Is visibility of the popup toggled on a button click?
+     */
+    public boolean isButtonClickTogglesPopupVisibility() {
+        return getState().buttonClickTogglesPopupVisibility;
+    }
+
+    /**
+     * If true, clicking the button toggles visibility of the popup:
+     * a visible popup will be hidden, and an invisible popup will be shown.
+     *
+     * Default is true.
+     */
+    public void setButtonClickTogglesPopupVisibility(boolean buttonClickTogglesPopupVisibility) {
+        getState().buttonClickTogglesPopupVisibility = buttonClickTogglesPopupVisibility;
+    }
+
+    /**
      * Add a listener that is called whenever the visibility of the popup is
      * changed.
      *
