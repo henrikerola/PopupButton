@@ -4,7 +4,7 @@ import sbt.ScalaVersion
 
 name := "PopupButton"
 
-version in ThisBuild := "2.4.0"
+version in ThisBuild := "2.4.1"
 
 organization in ThisBuild := "org.vaadin.hene"
 
@@ -12,9 +12,7 @@ crossPaths in ThisBuild := false
 
 autoScalaLibrary in ThisBuild := false
 
-javacOptions in (ThisBuild, Compile) ++= Seq("-source", "1.6")
-
-javacOptions in (ThisBuild, compile) ++= Seq("-target", "1.6")
+javacOptions in ThisBuild ++= Seq("-source", "1.6", "-target", "1.6")
 
 lazy val root = project.in(file(".")).aggregate(addon, demo)
 
