@@ -290,9 +290,13 @@ public class VPopupButton extends VButton {
 
         if (isOverlay) {
             while (element != null) {
-                if (element.getClassName().contains("v-window")) {
-                    return false;
+                try {
+                    if (element.getClassName().contains("v-window")) {
+                        return false;
+                    }
                 }
+                catch(Exception e)
+                {}
                 element = element.getParentElement();
             }
             return true;
