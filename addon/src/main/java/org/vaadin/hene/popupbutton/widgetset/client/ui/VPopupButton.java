@@ -70,6 +70,8 @@ public class VPopupButton extends VButton {
                     int left = getPopupPositionWidget().getAbsoluteLeft();
                     if (direction.isHorizontalCenter()) {
                         left -= (popup.getOffsetWidth() - getPopupPositionWidget().getOffsetWidth()) / 2;
+                    } else if (direction.isRight()) {
+                        left -= popup.getOffsetWidth() - getPopupPositionWidget().getOffsetWidth();
                     }
                     int top = getPopupPositionWidget().getAbsoluteTop()
                             + getPopupPositionWidget().getOffsetHeight();
