@@ -61,71 +61,66 @@ public class VPopupButton extends VButton {
     }
 
     void showPopup() {
-        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+        if (position.equals("auto")) {
+            int extra = 20;
 
-            public void execute() {
-                if (position.equals("auto")) {
-                    int extra = 20;
-
-                    int left = getPopupPositionWidget().getAbsoluteLeft();
-                    if (direction.isHorizontalCenter()) {
-                        left -= (popup.getOffsetWidth() - getPopupPositionWidget().getOffsetWidth()) / 2;
-                    }
-                    int top = getPopupPositionWidget().getAbsoluteTop()
-                            + getPopupPositionWidget().getOffsetHeight();
-                    int browserWindowWidth = Window.getClientWidth()
-                            + Window.getScrollLeft();
-                    int browserWindowHeight = Window.getClientHeight()
-                            + Window.getScrollTop();
-                    if (left + popup.getOffsetWidth() > browserWindowWidth
-                            - extra) {
-                        left = getPopupPositionWidget().getAbsoluteLeft()
-                                - (popup.getOffsetWidth() - getPopupPositionWidget()
-                                .getOffsetWidth());
-                    }
-                    if (top + popup.getOffsetHeight() > browserWindowHeight
-                            - extra) {
-                        top = getPopupPositionWidget().getAbsoluteTop()
-                                - popup.getOffsetHeight() - 2;
-                    }
-                    left = left + xOffset;
-                    if (left < 0) {
-                        left = 0;
-                    }
-                    popup.setPopupPosition(left, top + yOffset);
-                    popup.setVisible(true);
-                } else if (position.equals("fixed")) {
-                    int extra = 20;
-
-                    int left = getPopupPositionWidget().getAbsoluteLeft();
-                    int top = getPopupPositionWidget().getAbsoluteTop()
-                            + getPopupPositionWidget().getOffsetHeight()
-                            - Window.getScrollTop();
-
-                    int browserWindowWidth = Window.getClientWidth()
-                            + Window.getScrollLeft();
-                    int clientHeight = Window.getClientHeight();
-                    if (left + popup.getOffsetWidth() > browserWindowWidth
-                            - extra) {
-                        left = getPopupPositionWidget().getAbsoluteLeft()
-                                - (popup.getOffsetWidth() - getPopupPositionWidget()
-                                .getOffsetWidth());
-                    }
-                    if (top + popup.getOffsetHeight() > clientHeight - extra) {
-                        top = (getPopupPositionWidget().getAbsoluteTop() - Window
-                                .getScrollTop()) - popup.getOffsetHeight() - 2;
-                    }
-                    left = left + xOffset;
-                    if (left < 0) {
-                        left = 0;
-                    }
-                    popup.setPopupPosition(left, top + yOffset);
-                    popup.addStyleName("fixed");
-                    popup.setShadowStyle("fixed");
-                    popup.setVisible(true);
-                }
+            int left = getPopupPositionWidget().getAbsoluteLeft();
+            if (direction.isHorizontalCenter()) {
+                left -= (popup.getOffsetWidth() - getPopupPositionWidget().getOffsetWidth()) / 2;
             }
-        });
+            int top = getPopupPositionWidget().getAbsoluteTop()
+                    + getPopupPositionWidget().getOffsetHeight();
+            int browserWindowWidth = Window.getClientWidth()
+                    + Window.getScrollLeft();
+            int browserWindowHeight = Window.getClientHeight()
+                    + Window.getScrollTop();
+            if (left + popup.getOffsetWidth() > browserWindowWidth
+                    - extra) {
+                left = getPopupPositionWidget().getAbsoluteLeft()
+                        - (popup.getOffsetWidth() - getPopupPositionWidget()
+                        .getOffsetWidth());
+            }
+            if (top + popup.getOffsetHeight() > browserWindowHeight
+                    - extra) {
+                top = getPopupPositionWidget().getAbsoluteTop()
+                        - popup.getOffsetHeight() - 2;
+            }
+            left = left + xOffset;
+            if (left < 0) {
+                left = 0;
+            }
+            popup.setPopupPosition(left, top + yOffset);
+            popup.setVisible(true);
+        } else if (position.equals("fixed")) {
+            int extra = 20;
+
+            int left = getPopupPositionWidget().getAbsoluteLeft();
+            int top = getPopupPositionWidget().getAbsoluteTop()
+                    + getPopupPositionWidget().getOffsetHeight()
+                    - Window.getScrollTop();
+
+            int browserWindowWidth = Window.getClientWidth()
+                    + Window.getScrollLeft();
+            int clientHeight = Window.getClientHeight();
+            if (left + popup.getOffsetWidth() > browserWindowWidth
+                    - extra) {
+                left = getPopupPositionWidget().getAbsoluteLeft()
+                        - (popup.getOffsetWidth() - getPopupPositionWidget()
+                        .getOffsetWidth());
+            }
+            if (top + popup.getOffsetHeight() > clientHeight - extra) {
+                top = (getPopupPositionWidget().getAbsoluteTop() - Window
+                        .getScrollTop()) - popup.getOffsetHeight() - 2;
+            }
+            left = left + xOffset;
+            if (left < 0) {
+                left = 0;
+            }
+            popup.setPopupPosition(left, top + yOffset);
+            popup.addStyleName("fixed");
+            popup.setShadowStyle("fixed");
+            popup.setVisible(true);
+        }
     }
 
     void hidePopup() {

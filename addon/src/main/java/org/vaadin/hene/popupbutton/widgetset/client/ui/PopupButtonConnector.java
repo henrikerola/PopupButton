@@ -1,6 +1,7 @@
 package org.vaadin.hene.popupbutton.widgetset.client.ui;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -67,11 +68,15 @@ public class PopupButtonConnector extends ButtonConnector implements
             getWidget().hidePopup();
             getWidget().popup.setWidget(null);
         } else {
-            getWidget().popup.setVisible(false);
-            getWidget().popup.show();
-            getWidget().popup.setWidget(childrenComponentConnector.getWidget());
-            getWidget().setPopupStyleNames(getState().styles);
-            getWidget().showPopup();
+            Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+                public void execute() {
+                    getWidget().popup.setVisible(false);
+                    getWidget().popup.show();
+                    getWidget().popup.setWidget(childrenComponentConnector.getWidget());
+                    getWidget().setPopupStyleNames(getState().styles);
+                    getWidget().showPopup();
+                }
+            });
         }
     }
 
