@@ -197,11 +197,11 @@ public class DefaultView extends GridLayout implements View {
 
         final NativeSelect directionSelector = new NativeSelect();
         directionSelector.setNullSelectionAllowed(false);
-        directionSelector.addItem(Alignment.BOTTOM_LEFT);
-        directionSelector.setItemCaption(Alignment.BOTTOM_LEFT, "BOTTOM_LEFT");
+        directionSelector.addItem(Alignment.BOTTOM_RIGHT);
+        directionSelector.setItemCaption(Alignment.BOTTOM_RIGHT, "BOTTOM_RIGHT");
         directionSelector.addItem(Alignment.BOTTOM_CENTER);
         directionSelector.setItemCaption(Alignment.BOTTOM_CENTER, "BOTTOM_CENTER");
-        directionSelector.setValue(Alignment.BOTTOM_LEFT);
+        directionSelector.setValue(Alignment.BOTTOM_RIGHT);
         directionSelector.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
             public void valueChange(Property.ValueChangeEvent event) {
