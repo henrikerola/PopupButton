@@ -201,6 +201,10 @@ public class DefaultView extends GridLayout implements View {
         directionSelector.setItemCaption(Alignment.BOTTOM_RIGHT, "BOTTOM_RIGHT");
         directionSelector.addItem(Alignment.BOTTOM_CENTER);
         directionSelector.setItemCaption(Alignment.BOTTOM_CENTER, "BOTTOM_CENTER");
+
+        directionSelector.addItem(Alignment.BOTTOM_LEFT);
+        directionSelector.setItemCaption(Alignment.BOTTOM_LEFT, "BOTTOM_LEFT");
+
         directionSelector.setValue(Alignment.BOTTOM_RIGHT);
         directionSelector.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
