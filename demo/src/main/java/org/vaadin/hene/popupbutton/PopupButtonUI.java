@@ -14,5 +14,6 @@ public class PopupButtonUI extends UI {
 
         Navigator navigator = new Navigator(this, this);
         navigator.addView("", DefaultView.class);
+        navigator.addView("svgtest", SvgTestView.class);
     }
 }
