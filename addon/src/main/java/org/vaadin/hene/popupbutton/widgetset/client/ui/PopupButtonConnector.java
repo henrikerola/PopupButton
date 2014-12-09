@@ -67,8 +67,8 @@ public class PopupButtonConnector extends ButtonConnector implements
             getWidget().hidePopup();
             getWidget().popup.setWidget(null);
         } else {
-            getWidget().popup.setVisible(false);
             getWidget().popup.show();
+            getWidget().popup.setVisible(false);
             getWidget().popup.setWidget(childrenComponentConnector.getWidget());
             getWidget().setPopupStyleNames(getState().styles);
             getWidget().showPopup();
