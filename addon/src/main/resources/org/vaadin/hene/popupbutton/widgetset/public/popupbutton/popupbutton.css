@@ -52,6 +52,10 @@
 	-o-border-radius: 3px;
 }
 
+.v-popupbutton-popup > .popupContent > .v-captionwrapper > .v-caption {
+	display: block;
+}
+
 .v-popupbutton-popup.fixed {
 	position: fixed !important;
 	z-index: 20001 !important;
