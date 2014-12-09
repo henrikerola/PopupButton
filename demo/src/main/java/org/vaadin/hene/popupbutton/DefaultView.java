@@ -123,6 +123,7 @@ public class DefaultView extends GridLayout implements View {
         popupButtons.add(tableButton);
         tableButton.setDirection(Alignment.BOTTOM_CENTER);
         Table table = new Table();
+        table.setHeight("200px");
         table.addContainerProperty("property1", String.class, "-");
         table.addContainerProperty("property2", String.class, "-");
         table.addItem();
