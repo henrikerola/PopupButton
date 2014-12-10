@@ -39,17 +39,19 @@
 }
 
 .v-popupbutton-popup {
-	font-family: Arial, Helvetica, Tahoma, Verdana, sans-serif;
-	font-size: 12px;
-	line-height: normal;
-	color: #222;
-
 	background: #f8f8f9;
 	border: none;
 	border-radius: 3px;
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
 	-o-border-radius: 3px;
+}
+
+.v-popupbutton-popup-popupbutton-legacy {
+	font-family: Arial, Helvetica, Tahoma, Verdana, sans-serif;
+	font-size: 12px;
+	line-height: normal;
+	color: #222;
 }
 
 .v-popupbutton-popup > .popupContent > .v-captionwrapper > .v-caption {

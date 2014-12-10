@@ -133,7 +133,7 @@ public class DefaultView extends GridLayout implements View {
         Button openSubwindowButton = new Button("Open subwindow",
                 new Button.ClickListener() {
                     public void buttonClick(Button.ClickEvent event) {
-                        Window w = new Window();
+                        Window w = new Window("Subwindow");
                         w.center();
                         PopupButton popupButton = new PopupButton();
                         popupButtons.add(popupButton);
