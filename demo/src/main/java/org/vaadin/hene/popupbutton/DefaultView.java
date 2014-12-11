@@ -60,8 +60,6 @@ public class DefaultView extends GridLayout implements View {
         horizontalLayout.addComponent(iconButton);
 
         VerticalLayout userLayout = new VerticalLayout();
-        userLayout.setWidth("100px");
-        userLayout.setHeight("50px");
         iconButton.setComponent(userLayout);
 
         Button addUser = new Button("Add user");
@@ -169,8 +167,6 @@ public class DefaultView extends GridLayout implements View {
                 "../runo/icons/16/document-add.png"));
 
         GridLayout gl = new GridLayout(4, 3);
-        gl.setWidth("150px");
-        gl.setHeight("100px");
         gl.addComponent(createIconButton("../runo/icons/32/document.png"));
         gl.addComponent(createIconButton("../runo/icons/32/document-delete.png"));
         gl.addComponent(createIconButton("../runo/icons/32/document-pdf.png"));
