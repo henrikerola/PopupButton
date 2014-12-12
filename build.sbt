@@ -20,8 +20,8 @@ lazy val addon = project.settings(vaadinAddOnSettings :_*).settings(
   name := "PopupButton",
   libraryDependencies := Dependencies.addonDeps,
   // Javadoc generation causes problems so disabling it for now
-  mappings in packageVaadinDirectoryZip <<= (packageBin in Compile, packageSrc in Compile) map {
-    (bin, src) => Seq((bin, bin.name), (src, src.name))
+  mappings in packageVaadinDirectoryZip <<= (packageSrc in Compile) map {
+    (src) => Seq((src, src.name))
   },
   sources in doc in Compile := List()
 )
