@@ -16,5 +16,6 @@ public class PopupButtonUI extends UI {
         navigator.addView("", DefaultView.class);
         navigator.addView("svgtest", SvgTestView.class);
         navigator.addView("shortcutactiontest", ShortcutActionTestView.class);
+        navigator.addView("modalwindowtest", ModalWindowTestView.class);
     }
 }
