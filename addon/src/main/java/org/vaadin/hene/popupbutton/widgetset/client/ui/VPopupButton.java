@@ -52,6 +52,10 @@ public class VPopupButton extends VButton {
         getElement().getFirstChildElement().appendChild(e);
     }
 
+    public void setPopupPositionWidget(Widget popupPositionWidget) {
+        this.popupPositionWidget = popupPositionWidget;
+    }
+
     private Widget getPopupPositionWidget() {
         if (popupPositionWidget != null) {
             return popupPositionWidget;

@@ -10,6 +10,7 @@ import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.user.client.ui.Widget;
 import com.vaadin.client.*;
 import com.vaadin.client.ConnectorHierarchyChangeEvent.ConnectorHierarchyChangeHandler;
+import com.vaadin.client.annotations.OnStateChange;
 import com.vaadin.client.communication.RpcProxy;
 import com.vaadin.client.communication.StateChangeEvent;
 import com.vaadin.client.ui.button.ButtonConnector;
@@ -72,6 +73,16 @@ public class PopupButtonConnector extends ButtonConnector implements
             getWidget().popup.setWidget(childrenComponentConnector.getWidget());
             getWidget().setPopupStyleNames(getState().styles);
             getWidget().showPopup();
+        }
+    }
+
+    @OnStateChange("popupPositionConnector")
+    void onPopupPositionConnectorChanged() {
+        if (getState().popupPositionConnector != null) {
+            Widget w = ((ComponentConnector) getState().popupPositionConnector).getWidget();
+            getWidget().setPopupPositionWidget(w);
+        } else {
+            getWidget().setPopupPositionWidget(null);
         }
     }
 

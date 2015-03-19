@@ -43,7 +43,6 @@ public class PopupButton extends Button implements SingleComponentContainer {
     protected int xOffset = 0;
     protected int yOffset = 0;
     protected boolean popupFixedPosition;
-    // protected Paintable popupPositionPaintable; //FIXME
 
     private PopupButtonServerRpc rpc = new PopupButtonServerRpc() {
 
