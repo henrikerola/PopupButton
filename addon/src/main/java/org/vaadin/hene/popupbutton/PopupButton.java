@@ -40,13 +40,6 @@ public class PopupButton extends Button implements SingleComponentContainer {
     // This is here for getter because in the state we store int bitmask only
     private Alignment direction;
 
-    // These can be used by extending PopupButton.
-    // It's possible that these are removed in future versions or functionality
-    // is changed.
-    protected int xOffset = 0;
-    protected int yOffset = 0;
-    protected boolean popupFixedPosition;
-
     private PopupButtonServerRpc rpc = new PopupButtonServerRpc() {
 
         public void setPopupVisible(boolean visible) {
