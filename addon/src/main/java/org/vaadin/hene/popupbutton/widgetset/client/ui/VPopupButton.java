@@ -16,6 +16,7 @@ import com.vaadin.client.Util;
 import com.vaadin.client.VCaptionWrapper;
 import com.vaadin.client.debug.internal.VDebugWindow;
 import com.vaadin.client.ui.*;
+import com.vaadin.client.widgets.Grid;
 import com.vaadin.shared.ui.AlignmentInfo;
 
 import java.util.HashSet;
@@ -265,6 +266,10 @@ public class VPopupButton extends VButton {
                 if (rtaConnector != null) {
                     rtaConnector.flush();
                 }
+            } else if (popupComponentWidget2 instanceof Grid) {
+                // Grid implements HasWidgets but iterator() throws
+                // UnsupportedOperationException so don't do anything
+                // in case of Grid.
             } else if (popupComponentWidget2 instanceof HasWidgets) {
                 HasWidgets hw = (HasWidgets) popupComponentWidget2;
                 Iterator<Widget> iterator = hw.iterator();
