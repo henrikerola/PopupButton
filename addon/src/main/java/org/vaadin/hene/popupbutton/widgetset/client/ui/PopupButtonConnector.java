@@ -162,7 +162,8 @@ public class PopupButtonConnector extends ButtonConnector implements
             case Event.ONMOUSEDOWN:
                 if (!getWidget().isOrHasChildOfPopup(target)
                         && !getWidget().isOrHasChildOfConsole(target)
-                        && !getWidget().isOrHasChildOfButton(target)) {
+                        && !getWidget().isOrHasChildOfButton(target)
+                        && getState().closePopupOnOutsideClick) {
                     if (getState().popupVisible) {
                         getWidget().sync();
                         rpc.setPopupVisible(false);

@@ -12,7 +12,10 @@ import org.vaadin.hene.popupbutton.widgetset.client.ui.PopupButtonState;
 import com.vaadin.util.ReflectTools;
 
 /**
- * Server side component for the VPopupButton widget.
+ * A {@link Button} with a popup. The popup can contain any Vaadin
+ * {@link Component}s and @{link ComponentContainer}s.
+ *
+ * @author Henri Kerola / Vaadin
  */
 // This class contains code from AbstractComponentContainer
 public class PopupButton extends Button implements SingleComponentContainer {
@@ -159,6 +162,8 @@ public class PopupButton extends Button implements SingleComponentContainer {
 
     /**
      * Is visibility of the popup toggled on a button click?
+     *
+     * @see #isClosePopupOnOutsideClick
      */
     public boolean isButtonClickTogglesPopupVisibility() {
         return getState().buttonClickTogglesPopupVisibility;
@@ -169,9 +174,32 @@ public class PopupButton extends Button implements SingleComponentContainer {
      * a visible popup will be hidden, and an invisible popup will be shown.
      *
      * Default is true.
+     *
+     * @see #setClosePopupOnOutsideClick
      */
     public void setButtonClickTogglesPopupVisibility(boolean buttonClickTogglesPopupVisibility) {
         getState().buttonClickTogglesPopupVisibility = buttonClickTogglesPopupVisibility;
+    }
+
+    /**
+     * Is a click outside the popup closing the popup or not?
+     *
+     * @see #isButtonClickTogglesPopupVisibility
+     */
+    public boolean isClosePopupOnOutsideClick() {
+        return getState().closePopupOnOutsideClick;
+    }
+
+    /**
+     * If true, clicking on outside the popup closes it. Note that
+     * this doesn't affect clicking on the button itself.
+     *
+     * Default is true.
+     *
+     * @see #setButtonClickTogglesPopupVisibility
+     */
+    public void setClosePopupOnOutsideClick(boolean closePopupOnOutsideClick) {
+        getState().closePopupOnOutsideClick = closePopupOnOutsideClick;
     }
 
     /**
