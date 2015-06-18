@@ -275,7 +275,7 @@ public class PopupButton extends Button implements SingleComponentContainer {
          * @see PopupVisibilityEvent
          * @see PopupButton#addPopupVisibilityListener(PopupVisibilityListener)
          */
-        public void popupVisibilityChange(PopupVisibilityEvent event);
+        void popupVisibilityChange(PopupVisibilityEvent event);
     }
 
     @Override
