@@ -4,7 +4,7 @@ import sbt.ScalaVersion
 
 name := "PopupButton"
 
-version in ThisBuild := "2.6-SNAPSHOT"
+version in ThisBuild := "2.6.0"
 
 organization in ThisBuild := "org.vaadin.hene"
 
