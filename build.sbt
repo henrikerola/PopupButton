@@ -32,7 +32,7 @@ lazy val demo = project.settings(jetty() ++ vaadinWebSettings :_*).settings(
   libraryDependencies ++= Dependencies.demoDeps,
   javaOptions in compileVaadinWidgetsets := Seq("-Xss8M", "-Xmx512M", "-XX:MaxPermSize=512M"),
   vaadinOptions in compileVaadinWidgetsets := Seq("-strict", "-draftCompile"),
-  enableCompileVaadinWidgetsets in resourceGenerators := false,
+  skip in compileVaadinWidgetsets in resourceGenerators := true,
   javaOptions in vaadinDevMode ++= Seq("-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005"),
   // JavaDoc generation causes problems
   sources in doc in Compile := List(),
