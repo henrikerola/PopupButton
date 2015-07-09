@@ -17,7 +17,7 @@ object Dependencies {
 
   val demoDeps = Seq(
     vaadinClientCompiler % "provided",
-    vaadinThemes % "container"
+    vaadinThemes
   )
 
 }

@@ -26,7 +26,7 @@ lazy val addon = project.settings(vaadinAddOnSettings :_*).settings(
   sources in doc in Compile := List()
 )
 
-lazy val demo = project.settings(jetty() ++ vaadinWebSettings :_*).settings(
+lazy val demo = project.enablePlugins(JettyPlugin).settings(vaadinWebSettings :_*).settings(
   name := "popupbutton-demo",
   artifactName := { (sv: ScalaVersion, module: ModuleID, artifact: Artifact) => "PopupButton." + artifact.extension },
   libraryDependencies ++= Dependencies.demoDeps,
@@ -35,6 +35,5 @@ lazy val demo = project.settings(jetty() ++ vaadinWebSettings :_*).settings(
   skip in compileVaadinWidgetsets in resourceGenerators := true,
   javaOptions in vaadinDevMode ++= Seq("-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005"),
   // JavaDoc generation causes problems
-  sources in doc in Compile := List(),
-  webInfClasses in webapp := true
+  sources in doc in Compile := List()
 ).dependsOn(addon)
