@@ -35,5 +35,6 @@ lazy val demo = project.enablePlugins(JettyPlugin).settings(vaadinWebSettings :_
   skip in compileVaadinWidgetsets in resourceGenerators := true,
   javaOptions in vaadinDevMode ++= Seq("-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005"),
   // JavaDoc generation causes problems
-  sources in doc in Compile := List()
+  sources in doc in Compile := List(),
+  webappWebInfClasses := true
 ).dependsOn(addon)
