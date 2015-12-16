@@ -14,6 +14,8 @@ autoScalaLibrary in ThisBuild := false
 
 javacOptions in ThisBuild ++= Seq("-source", "1.6", "-target", "1.6")
 
+resolvers in ThisBuild += "Vaadin Pre-releases" at "https://maven.vaadin.com/vaadin-prereleases"
+
 lazy val root = project.in(file(".")).aggregate(addon, demo)
 
 lazy val addon = project.settings(vaadinAddOnSettings :_*).settings(
