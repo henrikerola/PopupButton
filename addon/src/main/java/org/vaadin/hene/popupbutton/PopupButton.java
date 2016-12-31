@@ -207,6 +207,7 @@ public class PopupButton extends Button implements SingleComponentContainer {
      * @see PopupVisibilityListener
      * @see #addPopupVisibilityListener(PopupVisibilityListener)
      */
+    @Deprecated
     public void removePopupVisibilityListener(PopupVisibilityListener listener) {
         removeListener(PopupVisibilityEvent.class, listener,
                 POPUP_VISIBILITY_METHOD);
@@ -287,6 +288,7 @@ public class PopupButton extends Button implements SingleComponentContainer {
     }
 
     @Override
+    @Deprecated
     public void removeComponentAttachListener(ComponentAttachListener listener) {
         removeListener(ComponentAttachEvent.class, listener,
                 ComponentAttachListener.attachMethod);
@@ -299,6 +301,7 @@ public class PopupButton extends Button implements SingleComponentContainer {
     }
 
     @Override
+    @Deprecated
     public void removeComponentDetachListener(ComponentDetachListener listener) {
         removeListener(ComponentDetachEvent.class, listener,
                 ComponentDetachListener.detachMethod);
