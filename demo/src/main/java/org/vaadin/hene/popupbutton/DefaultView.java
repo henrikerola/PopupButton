@@ -33,12 +33,7 @@ public class DefaultView extends GridLayout implements View {
         textCaptionButton.setStyleName("style1");
         textCaptionButton.addStyleName("style2");
         final TextArea textArea = new TextArea("Multi-line TextField");
-//        textArea.addValueChangeListener(new Property.ValueChangeListener() {
-//            @Override
-//            public void valueChange(Property.ValueChangeEvent event) {
-//                Notification.show("" + event.getProperty().getValue());
-//            }
-//        });
+        textArea.addValueChangeListener(event -> Notification.show(event.getValue()));
         textCaptionButton.addPopupVisibilityListener(new PopupButton.PopupVisibilityListener() {
             @Override
             public void popupVisibilityChange(PopupButton.PopupVisibilityEvent event) {
@@ -109,21 +104,20 @@ public class DefaultView extends GridLayout implements View {
         PopupButton comboBoxButton = new PopupButton("ComboBox in Popup");
         popupButtons.add(comboBoxButton);
         ComboBox cb = new ComboBox();
-//        cb.addItem("Item 1");
-//        cb.addItem("Item 2");
-//        cb.setInputPrompt("ComboBox");
+        cb.setItems("Item 1", "Item 2");
+        cb.setPlaceholder("ComboBox");
         comboBoxButton.setContent(cb);
         horizontalLayout.addComponent(comboBoxButton);
 
-//        PopupButton tableButton = new PopupButton("Table in Popup");
-//        popupButtons.add(tableButton);
-//        Table table = new Table();
-//        table.setHeight("200px");
-//        table.addContainerProperty("property1", String.class, "-");
-//        table.addContainerProperty("property2", String.class, "-");
-//        table.addItem();
-//        tableButton.setContent(table);
-//        horizontalLayout.addComponent(tableButton);
+        PopupButton tableButton = new PopupButton("Grid in Popup");
+        popupButtons.add(tableButton);
+        Grid grid = new Grid();
+        grid.setHeight("200px");
+        grid.addColumn(o -> "").setCaption("property1");
+        grid.addColumn(o -> "").setCaption("property2");
+        grid.setItems("Item 1");
+        tableButton.setContent(grid);
+        horizontalLayout.addComponent(tableButton);
 
 
         Button openSubwindowButton = new Button("Open subwindow",
@@ -189,36 +183,32 @@ public class DefaultView extends GridLayout implements View {
     private VerticalLayout createDirectionSelector() {
         VerticalLayout layout = new VerticalLayout();
 
-        final NativeSelect directionSelector = new NativeSelect();
-//        directionSelector.setNullSelectionAllowed(false);
-//        directionSelector.addItem(Alignment.BOTTOM_RIGHT);
-//        directionSelector.setItemCaption(Alignment.BOTTOM_RIGHT, "BOTTOM_RIGHT");
-//        directionSelector.addItem(Alignment.BOTTOM_CENTER);
-//        directionSelector.setItemCaption(Alignment.BOTTOM_CENTER, "BOTTOM_CENTER");
-//
-//        directionSelector.addItem(Alignment.BOTTOM_LEFT);
-//        directionSelector.setItemCaption(Alignment.BOTTOM_LEFT, "BOTTOM_LEFT");
-//
-//        directionSelector.setValue(Alignment.BOTTOM_RIGHT);
-//        directionSelector.addValueChangeListener(new Property.ValueChangeListener() {
-//            @Override
-//            public void valueChange(Property.ValueChangeEvent event) {
-//                for (PopupButton popupButton : popupButtons) {
-//                    popupButton.setDirection((Alignment) directionSelector.getValue());
-//                }
-//            }
-//        });
+        final NativeSelect<Alignment> directionSelector = new NativeSelect<>();
+        directionSelector.setItems(Alignment.BOTTOM_RIGHT, Alignment.BOTTOM_CENTER, Alignment.BOTTOM_LEFT);
+        directionSelector.setItemCaptionGenerator(item -> {
+            if (item == Alignment.BOTTOM_RIGHT) {
+                return "BOTTOM_RIGHT";
+            } else if (item == Alignment.BOTTOM_CENTER) {
+                return "BOTTOM_CENTER";
+            } else if (item == Alignment.BOTTOM_LEFT) {
+                return "BOTTOM_LEFT";
+            }
+            return "UNKNOWN";
+        });
+        directionSelector.setValue(Alignment.BOTTOM_RIGHT);
+        directionSelector.addValueChangeListener(event -> {
+            for (PopupButton popupButton : popupButtons) {
+                popupButton.setDirection(directionSelector.getValue());
+            }
+        });
         layout.addComponent(directionSelector);
 
         final CheckBox buttonClickTogglesPopupVisibility = new CheckBox("Button click toggles popup visibility", true);
-//        buttonClickTogglesPopupVisibility.addValueChangeListener(new Property.ValueChangeListener() {
-//            @Override
-//            public void valueChange(Property.ValueChangeEvent event) {
-//                for (PopupButton popupButton : popupButtons) {
-//                    popupButton.setButtonClickTogglesPopupVisibility(buttonClickTogglesPopupVisibility.getValue());
-//                }
-//            }
-//        });
+        buttonClickTogglesPopupVisibility.addValueChangeListener(event -> {
+            for (PopupButton popupButton : popupButtons) {
+                popupButton.setButtonClickTogglesPopupVisibility(buttonClickTogglesPopupVisibility.getValue());
+            }
+        });
         layout.addComponent(buttonClickTogglesPopupVisibility);
 
         return layout;
