@@ -19,12 +19,9 @@ public class ShortcutActionTestView extends VerticalLayout implements View {
 
         VerticalLayout popupLayout = new VerticalLayout();
         popupLayout.addComponent(new TextField());
-        Button button = new Button("Click me!", new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent event) {
-                Notification.show("Hello World!");
-            }
-        });
+        Button button = new Button("Click me!", event ->
+            Notification.show("Hello World!")
+        );
 
         // When the popup is open pressing the enter should show "Hello World!"
         // notification event when the button is not focused.

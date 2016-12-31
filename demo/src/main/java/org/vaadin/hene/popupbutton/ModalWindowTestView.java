@@ -14,14 +14,11 @@ public class ModalWindowTestView extends VerticalLayout implements View {
     public ModalWindowTestView() {
 
         final PopupButton popupButton = new PopupButton("Click me!");
-        popupButton.setContent(new Button("Open modal window", new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent event) {
-                Window window = new Window();
-                window.setModal(true);
-                getUI().addWindow(window);
-                popupButton.setPopupVisible(false);
-            }
+        popupButton.setContent(new Button("Open modal window", event -> {
+            Window window = new Window();
+            window.setModal(true);
+            getUI().addWindow(window);
+            popupButton.setPopupVisible(false);
         }));
         addComponent(popupButton);
     }

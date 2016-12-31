@@ -32,12 +32,7 @@ public class PopupButton extends Button implements SingleComponentContainer {
     // This is here for getter because in the state we store int bitmask only
     private Alignment direction;
 
-    private PopupButtonServerRpc rpc = new PopupButtonServerRpc() {
-
-        public void setPopupVisible(boolean visible) {
-            PopupButton.this.setPopupVisible(visible);
-        }
-    };
+    private PopupButtonServerRpc rpc = PopupButton.this::setPopupVisible;
 
     public PopupButton() {
         registerRpc(rpc);

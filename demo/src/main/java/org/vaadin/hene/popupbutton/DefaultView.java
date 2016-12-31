@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class DefaultView extends GridLayout implements View {
 
-    private List<PopupButton> popupButtons = new ArrayList<PopupButton>();
+    private List<PopupButton> popupButtons = new ArrayList<>();
 
     public DefaultView() {
         super(2, 2);
@@ -34,12 +34,9 @@ public class DefaultView extends GridLayout implements View {
         textCaptionButton.addStyleName("style2");
         final TextArea textArea = new TextArea("Multi-line TextField");
         textArea.addValueChangeListener(event -> Notification.show(event.getValue()));
-        textCaptionButton.addPopupVisibilityListener(new PopupButton.PopupVisibilityListener() {
-            @Override
-            public void popupVisibilityChange(PopupButton.PopupVisibilityEvent event) {
-                if (event.isPopupVisible()) {
-                    textArea.focus();
-                }
+        textCaptionButton.addPopupVisibilityListener(event -> {
+            if (event.isPopupVisible()) {
+                textArea.focus();
             }
         });
         textArea.setRows(10);
@@ -69,35 +66,26 @@ public class DefaultView extends GridLayout implements View {
 
         final PopupButton listenerButton = new PopupButton();
         popupButtons.add(listenerButton);
-        final Button b = new Button("Click me!", new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent event) {
-                listenerButton.setPopupVisible(false);
-                Notification.show("Button clicked!");
-            }
+        final Button b = new Button("Click me!", event -> {
+            listenerButton.setPopupVisible(false);
+            Notification.show("Button clicked!");
         });
         listenerButton.setContent(b);
         listenerButton.setCaption("VisibilityListener");
-        listenerButton
-                .addPopupVisibilityListener(new PopupButton.PopupVisibilityListener() {
-                    public void popupVisibilityChange(PopupButton.PopupVisibilityEvent event) {
-                        String msg = "Popup closed";
-                        if (event.getPopupButton().isPopupVisible()) {
-                            msg = "Popup opened";
-                            b.setClickShortcut(ShortcutAction.KeyCode.ENTER);
-                        } else {
-                            b.removeClickShortcut();
-                        }
-                        Notification.show(msg);
-                    }
-                });
-        horizontalLayout.addComponent(listenerButton);
-        listenerButton.addClickListener(new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent event) {
-                if (!listenerButton.isButtonClickTogglesPopupVisibility()) {
-                    listenerButton.setPopupVisible(!listenerButton.isPopupVisible());
+        listenerButton.addPopupVisibilityListener(event -> {
+            String msg = "Popup closed";
+                if (event.getPopupButton().isPopupVisible()) {
+                    msg = "Popup opened";
+                    b.setClickShortcut(ShortcutAction.KeyCode.ENTER);
+                } else {
+                    b.removeClickShortcut();
                 }
+                Notification.show(msg);
+            });
+        horizontalLayout.addComponent(listenerButton);
+        listenerButton.addClickListener(event -> {
+            if (!listenerButton.isButtonClickTogglesPopupVisibility()) {
+                listenerButton.setPopupVisible(!listenerButton.isPopupVisible());
             }
         });
 
@@ -120,23 +108,20 @@ public class DefaultView extends GridLayout implements View {
         horizontalLayout.addComponent(tableButton);
 
 
-        Button openSubwindowButton = new Button("Open subwindow",
-                new Button.ClickListener() {
-                    public void buttonClick(Button.ClickEvent event) {
-                        Window w = new Window("Subwindow");
-                        w.center();
-                        PopupButton popupButton = new PopupButton();
-                        popupButtons.add(popupButton);
-                        VerticalLayout l = new VerticalLayout();
-                        l.setMargin(true);
-                        l.setSpacing(true);
-                        l.addComponent(new DateField());
-                        l.addComponent(createPopupButton());
-                        popupButton.setContent(l);
-                        w.setContent(popupButton);
-                        getUI().addWindow(w);
-                    }
-                });
+        Button openSubwindowButton = new Button("Open subwindow", event -> {
+            Window w = new Window("Subwindow");
+            w.center();
+            PopupButton popupButton = new PopupButton();
+            popupButtons.add(popupButton);
+            VerticalLayout l = new VerticalLayout();
+            l.setMargin(true);
+            l.setSpacing(true);
+            l.addComponent(new DateField());
+            l.addComponent(createPopupButton());
+            popupButton.setContent(l);
+            w.setContent(popupButton);
+            getUI().addWindow(w);
+        });
         horizontalLayout.addComponent(openSubwindowButton);
 
         final PopupButton noContentPopupButton = new PopupButton("No content");
