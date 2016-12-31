@@ -23,10 +23,6 @@ public class PopupButton extends Button implements SingleComponentContainer {
 
     private static final long serialVersionUID = -3148268967211155218L;
 
-    private static final Method POPUP_VISIBILITY_METHOD = ReflectTools
-            .findMethod(PopupVisibilityListener.class, "popupVisibilityChange",
-                    PopupVisibilityEvent.class);
-
     private Component component;
 
     // This is here for getter because in the state we store int bitmask only
@@ -193,9 +189,9 @@ public class PopupButton extends Button implements SingleComponentContainer {
      * @see #removePopupVisibilityListener(PopupVisibilityListener)
      *
      */
-    public void addPopupVisibilityListener(PopupVisibilityListener listener) {
-        addListener(PopupVisibilityEvent.class, listener,
-                POPUP_VISIBILITY_METHOD);
+    public Registration addPopupVisibilityListener(PopupVisibilityListener listener) {
+        return addListener(PopupVisibilityEvent.class, listener,
+                PopupVisibilityListener.popupVisibilityMethod);
     }
 
     /**
@@ -210,7 +206,7 @@ public class PopupButton extends Button implements SingleComponentContainer {
     @Deprecated
     public void removePopupVisibilityListener(PopupVisibilityListener listener) {
         removeListener(PopupVisibilityEvent.class, listener,
-                POPUP_VISIBILITY_METHOD);
+                PopupVisibilityListener.popupVisibilityMethod);
     }
 
     /**
@@ -254,6 +250,11 @@ public class PopupButton extends Button implements SingleComponentContainer {
      */
     @FunctionalInterface
     public interface PopupVisibilityListener extends Serializable {
+
+        Method popupVisibilityMethod = ReflectTools.findMethod(
+                PopupVisibilityListener.class, "popupVisibilityChange",
+                        PopupVisibilityEvent.class);
+
         /**
          * Pass to {@link PopupButton.PopupVisibilityEvent} to start listening
          * for popup visibility changes.
