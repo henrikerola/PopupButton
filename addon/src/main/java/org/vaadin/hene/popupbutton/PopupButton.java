@@ -5,6 +5,7 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.Iterator;
 
+import com.vaadin.shared.Registration;
 import com.vaadin.ui.*;
 import org.vaadin.hene.popupbutton.widgetset.client.ui.PopupButtonServerRpc;
 import org.vaadin.hene.popupbutton.widgetset.client.ui.PopupButtonState;
@@ -21,15 +22,6 @@ import com.vaadin.util.ReflectTools;
 public class PopupButton extends Button implements SingleComponentContainer {
 
     private static final long serialVersionUID = -3148268967211155218L;
-
-    private static final Method COMPONENT_ATTACHED_METHOD = ReflectTools
-            .findMethod(ComponentAttachListener.class,
-                    "componentAttachedToContainer", ComponentAttachEvent.class);
-
-    private static final Method COMPONENT_DETACHED_METHOD = ReflectTools
-            .findMethod(ComponentDetachListener.class,
-                    "componentDetachedFromContainer",
-                    ComponentDetachEvent.class);
 
     private static final Method POPUP_VISIBILITY_METHOD = ReflectTools
             .findMethod(PopupVisibilityListener.class, "popupVisibilityChange",
@@ -293,26 +285,26 @@ public class PopupButton extends Button implements SingleComponentContainer {
     }
 
     @Override
-    public void addComponentAttachListener(ComponentAttachListener listener) {
-        addListener(ComponentContainer.ComponentAttachEvent.class, listener,
-                COMPONENT_ATTACHED_METHOD);
+    public Registration addComponentAttachListener(ComponentAttachListener listener) {
+        return addListener(ComponentAttachEvent.class, listener,
+                ComponentAttachListener.attachMethod);
     }
 
     @Override
     public void removeComponentAttachListener(ComponentAttachListener listener) {
-        removeListener(ComponentContainer.ComponentAttachEvent.class, listener,
-                COMPONENT_ATTACHED_METHOD);
+        removeListener(ComponentAttachEvent.class, listener,
+                ComponentAttachListener.attachMethod);
     }
 
     @Override
-    public void addComponentDetachListener(ComponentDetachListener listener) {
-        addListener(ComponentContainer.ComponentDetachEvent.class, listener,
-                COMPONENT_DETACHED_METHOD);
+    public Registration addComponentDetachListener(ComponentDetachListener listener) {
+        return addListener(ComponentDetachEvent.class, listener,
+                ComponentDetachListener.detachMethod);
     }
 
     @Override
     public void removeComponentDetachListener(ComponentDetachListener listener) {
-        removeListener(ComponentContainer.ComponentDetachEvent.class, listener,
-                COMPONENT_DETACHED_METHOD);
+        removeListener(ComponentDetachEvent.class, listener,
+                ComponentDetachListener.detachMethod);
     }
 }

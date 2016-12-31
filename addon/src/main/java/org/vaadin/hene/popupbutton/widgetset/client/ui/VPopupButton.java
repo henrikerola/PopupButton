@@ -128,7 +128,7 @@ public class VPopupButton extends VButton {
                     }
                     popup.setPopupPosition(left, top + yOffset);
                     popup.addStyleName("fixed");
-                    popup.setShadowStyle("fixed");
+                    //popup.setShadowStyle("fixed");
                     popup.setVisible(true);
                 }
             }
@@ -172,7 +172,7 @@ public class VPopupButton extends VButton {
         private ShortcutActionHandler shortcutActionHandler;
 
         public LayoutPopup() {
-            super(false, false, true);
+            super(false, false);
             setOwner(VPopupButton.this);
             setStyleName(CLASSNAME);
         }
@@ -284,10 +284,10 @@ public class VPopupButton extends VButton {
             return super.getContainerElement();
         }
 
-        @Override
-        protected void setShadowStyle(String style) {
-            super.setShadowStyle(style);
-        }
+//        @Override
+//        protected void setShadowStyle(String style) {
+//            super.setShadowStyle(style);
+//        }
     }
 
     @Override
