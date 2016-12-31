@@ -12,7 +12,7 @@ crossPaths in ThisBuild := false
 
 autoScalaLibrary in ThisBuild := false
 
-javacOptions in ThisBuild ++= Seq("-source", "1.6", "-target", "1.6")
+javacOptions in ThisBuild ++= Seq("-source", "1.8", "-target", "1.8", "-sourcepath", "")
 
 resolvers in ThisBuild += "Vaadin Pre-releases" at "https://maven.vaadin.com/vaadin-prereleases"
 
