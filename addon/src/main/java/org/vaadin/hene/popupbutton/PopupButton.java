@@ -256,6 +256,7 @@ public class PopupButton extends Button implements SingleComponentContainer {
      * visibility of the popup changes.
      *
      */
+    @FunctionalInterface
     public interface PopupVisibilityListener extends Serializable {
         /**
          * Pass to {@link PopupButton.PopupVisibilityEvent} to start listening
