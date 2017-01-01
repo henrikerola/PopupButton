@@ -102,28 +102,28 @@ public class PopupButtonConnector extends ButtonConnector implements
     }
 
     public void updateCaption(ComponentConnector component) {
-//        if (VCaption.isNeeded(component.getState())) {
-//            if (getWidget().popup.getCaptionWrapper() != null) {
-//                getWidget().popup.getCaptionWrapper().updateCaption();
-//            } else {
-//                VCaptionWrapper captionWrapper = new VCaptionWrapper(component,
-//                        getConnection());
-//                getWidget().popup.setWidget(captionWrapper);
-//                captionWrapper.updateCaption();
-//            }
-//        } else {
-//            if (getWidget().popup.getCaptionWrapper() != null) {
-//                getWidget().popup.setWidget((Widget) getWidget().popup
-//                        .getCaptionWrapper().getWrappedConnector().getWidget());
-//            }
-//        }
+        if (VCaption.isNeeded(component)) {
+            if (getWidget().popup.getCaptionWrapper() != null) {
+                getWidget().popup.getCaptionWrapper().updateCaption();
+            } else {
+                VCaptionWrapper captionWrapper = new VCaptionWrapper(component,
+                        getConnection());
+                getWidget().popup.setWidget(captionWrapper);
+                captionWrapper.updateCaption();
+            }
+        } else {
+            if (getWidget().popup.getCaptionWrapper() != null) {
+                getWidget().popup.setWidget(getWidget().popup
+                        .getCaptionWrapper().getWrappedConnector().getWidget());
+            }
+        }
     }
 
     private ComponentConnector childrenComponentConnector;
 
     public List<ComponentConnector> getChildComponents() {
         if (childrenComponentConnector == null) {
-            return Collections.<ComponentConnector> emptyList();
+            return Collections.emptyList();
         }
         return Collections.singletonList(childrenComponentConnector);
     }
