@@ -151,41 +151,41 @@ public class PopupButtonConnector extends ButtonConnector implements
             Element target = Element
                     .as(event.getNativeEvent().getEventTarget());
             switch (event.getTypeInt()) {
-            case Event.ONCLICK:
-                if (getWidget().isOrHasChildOfButton(target)) {
-                    if (getState().popupVisible && getState().buttonClickTogglesPopupVisibility) {
-                        getWidget().sync();
-                        rpc.setPopupVisible(false);
+                case Event.ONCLICK:
+                    if (getWidget().isOrHasChildOfButton(target)) {
+                        if (getState().popupVisible && getState().buttonClickTogglesPopupVisibility) {
+                            getWidget().sync();
+                            rpc.setPopupVisible(false);
+                        }
                     }
-                }
-                break;
-            case Event.ONMOUSEDOWN:
-                if (!getWidget().isOrHasChildOfPopup(target)
-                        && !getWidget().isOrHasChildOfConsole(target)
-                        && !getWidget().isOrHasChildOfButton(target)
-                        && getState().closePopupOnOutsideClick) {
+                    break;
+                case Event.ONMOUSEDOWN:
+                    if (!getWidget().isOrHasChildOfPopup(target)
+                            && !getWidget().isOrHasChildOfConsole(target)
+                            && !getWidget().isOrHasChildOfButton(target)
+                            && getState().closePopupOnOutsideClick) {
+                        if (getState().popupVisible) {
+                            getWidget().sync();
+                            rpc.setPopupVisible(false);
+                        }
+                    }
+                    break;
+                case Event.ONKEYPRESS:
+                    if (getWidget().isOrHasChildOfPopup(target)) {
+                        // Catch children that use keyboard, so we can unfocus
+                        // them
+                        // when
+                        // hiding
+                        getWidget().addToActiveChildren(target);
+                    }
+                    break;
+                case Event.ONKEYDOWN:
                     if (getState().popupVisible) {
-                        getWidget().sync();
-                        rpc.setPopupVisible(false);
+                        getWidget().onKeyDownOnVisiblePopup(event.getNativeEvent(), this);
                     }
-                }
-                break;
-            case Event.ONKEYPRESS:
-                if (getWidget().isOrHasChildOfPopup(target)) {
-                    // Catch children that use keyboard, so we can unfocus
-                    // them
-                    // when
-                    // hiding
-                    getWidget().addToActiveChildren(target);
-                }
-                break;
-            case Event.ONKEYDOWN:
-                if (getState().popupVisible) {
-                    getWidget().onKeyDownOnVisiblePopup(event.getNativeEvent(), this);
-                }
-                break;
-            default:
-                break;
+                    break;
+                default:
+                    break;
             }
         }
     }

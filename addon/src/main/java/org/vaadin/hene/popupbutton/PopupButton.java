@@ -253,7 +253,7 @@ public class PopupButton extends Button implements SingleComponentContainer {
 
         Method popupVisibilityMethod = ReflectTools.findMethod(
                 PopupVisibilityListener.class, "popupVisibilityChange",
-                        PopupVisibilityEvent.class);
+                PopupVisibilityEvent.class);
 
         /**
          * Pass to {@link PopupButton.PopupVisibilityEvent} to start listening

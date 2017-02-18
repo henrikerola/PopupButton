@@ -20,7 +20,7 @@ public class ShortcutActionTestView extends VerticalLayout implements View {
         VerticalLayout popupLayout = new VerticalLayout();
         popupLayout.addComponent(new TextField());
         Button button = new Button("Click me!", event ->
-            Notification.show("Hello World!")
+                Notification.show("Hello World!")
         );
 
         // When the popup is open pressing the enter should show "Hello World!"

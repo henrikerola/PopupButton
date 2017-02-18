@@ -75,14 +75,14 @@ public class DefaultView extends GridLayout implements View {
         listenerButton.setCaption("VisibilityListener");
         listenerButton.addPopupVisibilityListener(event -> {
             String msg = "Popup closed";
-                if (event.getPopupButton().isPopupVisible()) {
-                    msg = "Popup opened";
-                    b.setClickShortcut(ShortcutAction.KeyCode.ENTER);
-                } else {
-                    b.removeClickShortcut();
-                }
-                Notification.show(msg);
-            });
+            if (event.getPopupButton().isPopupVisible()) {
+                msg = "Popup opened";
+                b.setClickShortcut(ShortcutAction.KeyCode.ENTER);
+            } else {
+                b.removeClickShortcut();
+            }
+            Notification.show(msg);
+        });
         horizontalLayout.addComponent(listenerButton);
         listenerButton.addClickListener(event -> {
             if (!listenerButton.isButtonClickTogglesPopupVisibility()) {

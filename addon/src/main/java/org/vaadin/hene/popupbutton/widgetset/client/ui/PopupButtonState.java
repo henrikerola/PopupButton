@@ -6,8 +6,8 @@ import com.vaadin.shared.ui.button.ButtonState;
 
 public class PopupButtonState extends ButtonState {
 
-	public boolean popupVisible;
-	public Connector popupPositionConnector;
+    public boolean popupVisible;
+    public Connector popupPositionConnector;
 
     @DelegateToWidget
     public int direction = 0;
