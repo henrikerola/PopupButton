@@ -1,9 +1,10 @@
 package org.vaadin.hene.popupbutton;
 
 import com.vaadin.event.ShortcutAction;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.server.ThemeResource;
+import com.vaadin.server.Resource;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
@@ -45,7 +46,7 @@ public class DefaultView extends GridLayout implements View {
 
         PopupButton iconButton = new PopupButton();
         popupButtons.add(iconButton);
-        iconButton.setIcon(new ThemeResource("../runo/icons/16/users.png"));
+        iconButton.setIcon(VaadinIcons.USERS);
         iconButton.setStyleName("style1 style2");
         horizontalLayout.addComponent(iconButton);
 
@@ -54,13 +55,13 @@ public class DefaultView extends GridLayout implements View {
 
         Button addUser = new Button("Add user");
         addUser.setStyleName(ValoTheme.BUTTON_LINK);
-        addUser.setIcon(new ThemeResource("../runo/icons/16/user.png"));
+        addUser.setIcon(VaadinIcons.USER);
         userLayout.addComponent(addUser);
         userLayout.setComponentAlignment(addUser, Alignment.MIDDLE_LEFT);
 
         Button removeUser = new Button("Remove user");
         removeUser.setStyleName(ValoTheme.BUTTON_LINK);
-        removeUser.setIcon(new ThemeResource("../runo/icons/16/cancel.png"));
+        removeUser.setIcon(VaadinIcons.CLOSE);
         userLayout.addComponent(removeUser);
         userLayout.setComponentAlignment(removeUser, Alignment.MIDDLE_LEFT);
 
@@ -140,27 +141,26 @@ public class DefaultView extends GridLayout implements View {
     private PopupButton createPopupButton() {
         PopupButton popupButton = new PopupButton("Add");
         popupButtons.add(popupButton);
-        popupButton.setIcon(new ThemeResource(
-                "../runo/icons/16/document-add.png"));
+        popupButton.setIcon(VaadinIcons.PLUS_CIRCLE_O);
 
-        GridLayout gl = new GridLayout(4, 3);
-        gl.addComponent(createIconButton("../runo/icons/32/document.png"));
-        gl.addComponent(createIconButton("../runo/icons/32/document-delete.png"));
-        gl.addComponent(createIconButton("../runo/icons/32/document-pdf.png"));
-        gl.addComponent(createIconButton("../runo/icons/32/document-web.png"));
-        gl.addComponent(createIconButton("../runo/icons/32/document-doc.png"));
-        gl.addComponent(createIconButton("../runo/icons/32/document-ppt.png"));
-        gl.addComponent(createIconButton("../runo/icons/32/document-xsl.png"));
-        gl.addComponent(createIconButton("../runo/icons/32/document-image.png"));
-        gl.addComponent(createIconButton("../runo/icons/32/document-txt.png"));
+        GridLayout gl = new GridLayout(3, 3);
+        gl.addComponent(createIconButton(VaadinIcons.FILE_CODE));
+        gl.addComponent(createIconButton(VaadinIcons.FILE_FONT));
+        gl.addComponent(createIconButton(VaadinIcons.FILE_MOVIE));
+        gl.addComponent(createIconButton(VaadinIcons.FILE_PICTURE));
+        gl.addComponent(createIconButton(VaadinIcons.FILE_PRESENTATION));
+        gl.addComponent(createIconButton(VaadinIcons.FILE_TABLE));
+        gl.addComponent(createIconButton(VaadinIcons.FILE_TEXT));
+        gl.addComponent(createIconButton(VaadinIcons.FILE_SOUND));
+        gl.addComponent(createIconButton(VaadinIcons.FILE_PROCESS));
 
         popupButton.setContent(gl);
         return popupButton;
     }
 
-    private Button createIconButton(String icon) {
+    private Button createIconButton(Resource icon) {
         Button b = new Button();
-        b.setIcon(new ThemeResource(icon));
+        b.setIcon(icon);
         b.setStyleName(ValoTheme.BUTTON_LINK);
         return b;
     }
