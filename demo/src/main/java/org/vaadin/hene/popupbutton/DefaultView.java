@@ -41,7 +41,7 @@ public class DefaultView extends GridLayout implements View {
             }
         });
         textArea.setRows(10);
-        textCaptionButton.setComponent(textArea);
+        textCaptionButton.setContent(textArea);
         horizontalLayout.addComponent(textCaptionButton);
 
         PopupButton iconButton = new PopupButton();
@@ -51,7 +51,7 @@ public class DefaultView extends GridLayout implements View {
         horizontalLayout.addComponent(iconButton);
 
         VerticalLayout userLayout = new VerticalLayout();
-        iconButton.setComponent(userLayout);
+        iconButton.setContent(userLayout);
 
         Button addUser = new Button("Add user");
         addUser.setStyleName(ValoTheme.BUTTON_LINK);
