@@ -128,7 +128,6 @@ public class VPopupButton extends VButton {
                     }
                     popup.setPopupPosition(left, top + yOffset);
                     popup.addStyleName("fixed");
-                    //popup.setShadowStyle("fixed");
                     popup.setVisible(true);
                 }
             }
@@ -253,7 +252,6 @@ public class VPopupButton extends VButton {
                 try {
                     nativeBlur(e);
                 } catch (Exception ignored) {
-                    Window.alert("" + ignored);
                 }
             }
             activeChildren.clear();
@@ -283,11 +281,6 @@ public class VPopupButton extends VButton {
         public com.google.gwt.user.client.Element getContainerElement() {
             return super.getContainerElement();
         }
-
-//        @Override
-//        protected void setShadowStyle(String style) {
-//            super.setShadowStyle(style);
-//        }
     }
 
     @Override
