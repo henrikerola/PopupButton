@@ -136,6 +136,18 @@ public class PopupButton extends Button implements SingleComponentContainer {
         getState().direction = direction.getBitMask();
     }
 
+    public void setPositionAuto() {
+        getState().position = "auto";
+    }
+
+    public void setPositionFixed() {
+        getState().position = "fixed";
+    }
+
+    public void setPositionCss() {
+        getState().position = "css";
+    }
+
     /**
      * Is visibility of the popup toggled on a button click?
      *
