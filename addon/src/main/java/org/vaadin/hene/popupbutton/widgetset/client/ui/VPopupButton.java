@@ -132,8 +132,8 @@ public class VPopupButton extends VButton {
                 } else if (position.equals("css")) {
                     // position is specified by css
                     final Element elem = popup.getElement();
-                    elem.getStyle().setProperty("top", null);
-                    elem.getStyle().setProperty("left", null);
+                    elem.getStyle().clearTop();
+                    elem.getStyle().clearLeft();
                     popup.setVisible(true);
                 }
             }
