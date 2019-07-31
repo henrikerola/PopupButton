@@ -11,6 +11,10 @@ public class PopupButtonState extends ButtonState {
 
     @DelegateToWidget
     public int direction = 0;
+
+    @DelegateToWidget
+    public String position = "auto";
+
     public boolean buttonClickTogglesPopupVisibility = true;
     public boolean closePopupOnOutsideClick = true;
 }

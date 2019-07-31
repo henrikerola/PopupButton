@@ -129,6 +129,12 @@ public class VPopupButton extends VButton {
                     popup.setPopupPosition(left, top + yOffset);
                     popup.addStyleName("fixed");
                     popup.setVisible(true);
+                } else if (position.equals("css")) {
+                    // position is specified by css
+                    final Element elem = popup.getElement();
+                    elem.getStyle().clearTop();
+                    elem.getStyle().clearLeft();
+                    popup.setVisible(true);
                 }
             }
         });
@@ -159,6 +165,11 @@ public class VPopupButton extends VButton {
     // Called by @DelegateToWidget
     public void setDirection(int direction) {
         this.direction = new AlignmentInfo(direction);
+    }
+
+    // Called by @DelegateToWidget
+    public void setPosition(String position) {
+        this.position = position;
     }
 
     class LayoutPopup extends VOverlay {
@@ -295,7 +306,7 @@ public class VPopupButton extends VButton {
         if (isOverlay) {
             while (element != null) {
                 try {
-                    if (element.getClassName().contains("v-window")) {
+                    if (element.hasClassName("v-window")) {
                         return false;
                     }
                 } catch (Exception e) {
